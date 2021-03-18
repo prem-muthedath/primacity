@@ -18,7 +18,7 @@
 --   for details, see ~/software-development/notes/facebook-hackathon-2015.pages
 --
 --   author & source: /u/ Siddhanathan @ https://goo.gl/Yv4XMh (stackoverflow).
---   prem: fixed issues raised by ghc wanings -- 11 MAR 2021.
+--   prem: fixed issues raised by ghc warnings -- 11 MAR 2021.
 
 -- NOTE:
 --  with base-4.8, Prelude re-exports a few more entities from modules such as 
