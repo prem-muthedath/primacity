@@ -3,7 +3,7 @@ Siddanathan's primacity algorithm (based on facebook hackathon).
 
 Source: https://goo.gl/Yv4XMh (stackoverflow)
 
-Basically, given 3 positive integers -- A, B, K -- output number of item in [A, 
+Basically, given 3 positive integers -- A, B, K -- output number of items in [A, 
 B] with primacity K.  For example, if A=5, B=15, K=2, the program will output 5 
 -- i.e., 5 numbers in [5, 15] have primacity 2.
 
