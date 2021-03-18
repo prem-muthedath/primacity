@@ -1,3 +1,6 @@
+# .gitignore file  -- we first ignore everything; then add in what we want.
+################################################################################
+
 /**
 !*.hs
 !/.gitignore
