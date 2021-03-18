@@ -1,0 +1,7 @@
+/**
+!*.hs
+!/.gitignore
+!/README.md
+!/cabal.project.*
+!/*.cabal
+
