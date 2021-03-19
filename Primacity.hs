@@ -10,10 +10,10 @@
 --
 --   EXECUTION STEPS:
 --   1. the program first prompts the user for "number of questions", which we 
---      call as `n`.  `n` can be any positive integer (i.e., 1, 2, 3, etc.).  
---   2. the program then prompts the user `n` times for values of A, B, K.  
+--      call as `n`.  `n` can be any positive integer (i.e., 1, 2, 3, etc.).
+--   2. the program then prompts the user `n` times for values of A, B, K.
 --   3. after each A-B-K input, the program spits out the number of items in [A, 
---      B] with primacity K. 
+--      B] with primacity K.
 --
 --   for details, see ~/software-development/notes/facebook-hackathon-2015.pages
 --
@@ -34,27 +34,27 @@ import Data.List           ( nub )
 
 isPrime :: (Integral i) => i -> Bool
 isPrime n = isPrime_ n primes
-  -- prem: + type-signature, [] pattern match 
+  -- prem: + type-signature, [] pattern match
   where isPrime_ :: (Integral i) => i -> [i] -> Bool
         isPrime_ m [] = isPrime_ m primes
         isPrime_ m (p:ps)
             | p * p > m      = True
             | m `mod` p == 0 = False
             | otherwise      = isPrime_ m ps
-  
+
 primes :: (Integral i) => [i]
 primes = 2 : filter isPrime [3,5..]
 
 primeFactors :: (Integral i) => i -> [i]
 primeFactors n = factors n primes
-  -- prem: + type-signature, [] pattern match 
+  -- prem: + type-signature, [] pattern match
   where factors :: (Integral i) => i -> [i] -> [i]
         factors m [] = factors m primes
         factors m (x:xs)
             | x * x > m      = [m]
             | m `mod` x == 0 = x : factors (m `div` x) (x:xs)
             | otherwise      = factors m xs
-  
+
 primacity :: (Integral i) => i -> Int
 primacity = length . nub . primeFactors
 
@@ -82,7 +82,7 @@ printNTimes n total = do
 
 defaultMain :: IO ()
 defaultMain = do
-  putStrLn "please input a positive integer n -- the number of 'questions'" 
+  putStrLn "please input a positive integer n -- the number of 'questions'"
   n :: Int <- read <$> getLine
   printNTimes n n
 
