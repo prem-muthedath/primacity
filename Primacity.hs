@@ -62,7 +62,7 @@ user :: IO Int
 user = do
   putStrLn "please input positive integers a, b, k, such that 2 <= a <= b and k >= 1, in the format: a b k"
   xs <- getLine
-  -- type annotate bindings with `ScopedTypeVaariables`; see /u/ jacob wang @ 
+  -- type-annotate bindings with `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
   let a :: Int = read . takeWhile (/=' ') . dropN 0 $ xs
   let b :: Int = read . takeWhile (/=' ') . dropN 1 $ xs
@@ -85,7 +85,7 @@ printNTimes n total = do
 defaultMain :: IO ()
 defaultMain = do
   putStrLn "please input a positive integer n -- the number of 'questions'"
-  -- type annotate bindings with `ScopedTypeVaariables`; see /u/ jacob wang @ 
+  -- type-annotate bindings with `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
   n :: Int <- read <$> getLine
   printNTimes n n
