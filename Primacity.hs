@@ -32,10 +32,10 @@ module Primacity (defaultMain) where
 
 import Data.List           ( nub )
 
-isPrime :: (Integral i) => i -> Bool
+isPrime :: forall i. Integral i => i -> Bool
 isPrime n = isPrime_ n primes
   -- prem: + type-signature, [] pattern match
-  where isPrime_ :: (Integral i) => i -> [i] -> Bool
+  where isPrime_ :: i -> [i] -> Bool
         isPrime_ m [] = isPrime_ m primes
         isPrime_ m (p:ps)
             | p * p > m      = True
@@ -45,10 +45,10 @@ isPrime n = isPrime_ n primes
 primes :: (Integral i) => [i]
 primes = 2 : filter isPrime [3,5..]
 
-primeFactors :: (Integral i) => i -> [i]
+primeFactors :: forall i. Integral i => i -> [i]
 primeFactors n = factors n primes
   -- prem: + type-signature, [] pattern match
-  where factors :: (Integral i) => i -> [i] -> [i]
+  where factors :: i -> [i] -> [i]
         factors m [] = factors m primes
         factors m (x:xs)
             | x * x > m      = [m]
