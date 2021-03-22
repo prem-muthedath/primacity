@@ -6,6 +6,6 @@
 !/.gitignore
 !/README.md
 !/CHANGELOG.md
-!/cabal.project.*
+!/cabal.project.freeze
 !/*.cabal
 
