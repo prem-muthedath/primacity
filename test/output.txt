@@ -1,4 +1,4 @@
--- primacity output (corresponding to input.txt)
+-- expected primacity output (corresponding to input.txt)
 -- line items are primacity values.
 -- source: https://pastebin.com/60yhTXsR (anirudh rayabharam)
 Case #1: 5
