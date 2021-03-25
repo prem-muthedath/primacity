@@ -28,7 +28,7 @@
 --  import Control.Applicative ( pure, (<$>) )
 --  import Data.Monoid         ( (<>) )
 
-module Primacity (defaultMain) where
+module Primacity where
 
 import Data.List           ( nub )
 
@@ -58,6 +58,11 @@ primeFactors n = factors n primes
 primacity :: (Integral i) => i -> Int
 primacity = length . nub . primeFactors
 
+primacitys :: [(Int, Int, Int)] -> [Int]
+primacitys xs = map (\x -> go x) xs
+  where go :: (Int, Int, Int) -> Int
+        go (a, b, k) = length . filter (== k) . fmap primacity $ [a..b]
+
 user :: IO Int
 user = do
   putStrLn "please input positive integers a, b, k, such that 2 <= a <= b and k >= 1, in the format: a b k"
@@ -67,7 +72,8 @@ user = do
   let a :: Int = read . takeWhile (/=' ') . dropN 0 $ xs
   let b :: Int = read . takeWhile (/=' ') . dropN 1 $ xs
   let k :: Int = read . takeWhile (/=' ') . dropN 2 $ xs
-  let n = length . filter (== k) . fmap primacity $ [a..b]
+  let n = head $ primacitys [(a, b, k)]
+  -- let n = length . filter (== k) . fmap primacity $ [a..b]
   pure n
     -- prem: + dropN type-signature
     where dropN :: Int -> [Char] -> [Char]

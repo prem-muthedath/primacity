@@ -8,4 +8,7 @@
 !/CHANGELOG.md
 !/cabal.project.freeze
 !/*.cabal
+!/app/
+!/test/
+!*.txt
 

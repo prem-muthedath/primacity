@@ -1,7 +1,7 @@
-module Main where
+module Main (main) where
 
 import Primacity (defaultMain)
 
-main :: IO()
+main :: IO ()
 main = defaultMain
 
