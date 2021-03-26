@@ -33,7 +33,7 @@ testCase line
         replace :: String
         replace = concatMap (\x -> if x == ' ' then "," else [x]) line
 
--- | return expected primacity count from a line of text.
+-- | return expected primacity count for a test case from a line of text.
 -- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the 
 -- primacity count, can have any number of digits. example: `Case #10: 691209`.
 anExpected :: String -> Maybe String
@@ -88,11 +88,11 @@ type Expected = Int   -- expected primacity count
 -- | format & print primacity test results.
 printResults :: [(CaseNo, TestCase, Actual, Expected)] -> IO ()
 printResults vals = do
-  putStrLn "########################################################################################"
-  putStrLn "PRIMACITY COUNT TEST RESULTS -- Case # : input (a, b, k) | actual | expected | PASS/FAIL"
-  putStrLn "########################################################################################"
+  putStrLn "#######################################################################################"
+  putStrLn "PRIMACITY COUNT TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL"
+  putStrLn "#######################################################################################"
   mapM_(\(n, x, y, z) -> putStrLn $
-      "Case #" ++  show n ++ ": " ++
+      "Test case #" ++  show n ++ ": " ++
       show x ++ " | " ++
       show y ++ " | "  ++
       show z ++ " | "  ++
@@ -101,9 +101,9 @@ printResults vals = do
 -- | run quick check tests.
 qcTests :: IO ()
 qcTests = do
-  putStrLn "########################################################################################"
+  putStrLn "#######################################################################################"
   putStrLn "QuickCheck Test Results"
-  putStrLn "########################################################################################"
+  putStrLn "#######################################################################################"
   quickCheck factorsProduct
   quickCheck factorsPrime
 
