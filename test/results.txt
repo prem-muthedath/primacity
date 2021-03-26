@@ -1,5 +1,7 @@
 -- primacity tests output.
--- this is a frozen sample, but all runs should give same results.
+-- this is a frozen sample, but all test runs should give same results.
+-- lines that begin with `--`, such as this one, are comments.
+-- all non-comment lines together represent the test results.
 ########################################################################
 TEST RESULTS -- Case # : input (a, b, k) | actual | expected | PASS/FAIL
 ########################################################################

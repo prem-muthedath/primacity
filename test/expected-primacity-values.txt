@@ -1,6 +1,7 @@
--- expected primacity output (corresponding to input.txt)
--- line items are primacity values.
--- source: https://pastebin.com/60yhTXsR (anirudh rayabharam)
+-- expected primacity values corresponding to test cases in test-cases.txt.
+-- lines that begin with `--`, such as this one, are comments.
+-- each non-comment line contains expected primacity value for it's corresponding test case.
+-- source: https://pastebin.com/60yhTXsR (anirudh rayabharam).
 Case #1: 5
 Case #2: 7
 Case #3: 2

@@ -1,7 +1,9 @@
--- primacity input data
--- line item data order: A, B, K, where we want count of numbers in [A, B] with primacity K.
--- source: https://pastebin.com/tUftWCVR (anirudh rayabharam)
--- 100 -- no of inputs
+-- primacity test cases.
+-- lines that begin with `--`, such as this one, are comments.
+-- each non-comment line represents a unique test case.
+-- test case data order: A, B, K, where we want count of numbers in [A, B] with primacity K.
+-- source: https://pastebin.com/tUftWCVR (anirudh rayabharam).
+-- 100 --> no of test cases in this file.
 5 15 2
 2 10 1
 24 42 3
