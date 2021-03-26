@@ -1,4 +1,5 @@
 -- primacity tests output.
+-- this is a frozen sample, but all runs should give same results.
 ########################################################################
 TEST RESULTS -- Case # : input (a, b, k) | actual | expected | PASS/FAIL
 ########################################################################
