@@ -10,7 +10,7 @@ import Test.QuickCheck
 import Data.List (zipWith4, stripPrefix)
 
 import Properties (factorsProduct, factorsPrime)
-import Primacity (primacitys)
+import Primacity (primacityCounts)
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
@@ -23,6 +23,7 @@ parseLine f line = case (f line) of
 -- | return primacity test case as a comma-delimited string from a line of text.
 -- line pattern: `x y z` where x, y, z are numbers with any number of digits.
 -- example: `1673990 4964281 4`. we want to extract this pattern as "x,y,z".
+-- NOTE: `x y z` means numbers in [`x`..`y`] with primacity `z`.
 testCase :: String -> Maybe String
 testCase line
           | valid     = Just $ replace
@@ -32,9 +33,9 @@ testCase line
         replace :: String
         replace = concatMap (\x -> if x == ' ' then "," else [x]) line
 
--- | return expected primacity value from a line of text.
+-- | return expected primacity count from a line of text.
 -- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the 
--- primacity, can have any number of digits. example: `Case #10: 691209`.
+-- primacity count, can have any number of digits. example: `Case #10: 691209`.
 anExpected :: String -> Maybe String
 anExpected line = do
       xs <- stripPrefix "Case #" line
@@ -54,7 +55,7 @@ parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
         nonempty :: [String]-> [String]
         nonempty = filter (/="")
 
-type TestCase = (Int, Int, Int)
+type TestCase = (Int, Int, Int)   -- primacity count test case
 
 -- | return list of primacity test cases, each of type `TestCase`.
 testCases :: IO [TestCase]
@@ -63,33 +64,33 @@ testCases = do
   let pLines = parse contents testCase
   return $ map (\line -> read $ "(" ++ line ++ ")" :: TestCase) pLines
 
--- | return expected primacity values.
+-- | return expected primacity counts.
 expected :: IO [Int]
 expected = do
-  contents <- readFile "./test/expected-primacity-values.txt"
+  contents <- readFile "./test/expected-primacity-counts.txt"
   let pLines = parse contents anExpected
   return $ map (\x -> read x :: Int) pLines
 
--- | run primacity tests.
+-- | run primacity count tests.
 primacityTests :: IO ()
 primacityTests = do
   xs <- testCases
   zs <- expected
-  let ys :: [Int] = primacitys xs
+  let ys :: [Int] = primacityCounts xs
       results     = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
   printResults results
 
 -- | some type synonyms to make the code clear.
-type ItemNo   = Int
-type Actual   = Int
-type Expected = Int
+type CaseNo   = Int   -- test case number
+type Actual   = Int   -- actual primacity count
+type Expected = Int   -- expected primacity count
 
 -- | format & print primacity test results.
-printResults :: [(ItemNo, TestCase, Actual, Expected)] -> IO ()
+printResults :: [(CaseNo, TestCase, Actual, Expected)] -> IO ()
 printResults vals = do
-  putStrLn "##################################################################################"
-  putStrLn "PRIMACITY TEST RESULTS -- Case # : input (a, b, k) | actual | expected | PASS/FAIL"
-  putStrLn "##################################################################################"
+  putStrLn "########################################################################################"
+  putStrLn "PRIMACITY COUNT TEST RESULTS -- Case # : input (a, b, k) | actual | expected | PASS/FAIL"
+  putStrLn "########################################################################################"
   mapM_(\(n, x, y, z) -> putStrLn $
       "Case #" ++  show n ++ ": " ++
       show x ++ " | " ++
@@ -100,9 +101,9 @@ printResults vals = do
 -- | run quick check tests.
 qcTests :: IO ()
 qcTests = do
-  putStrLn "##################################################################################"
+  putStrLn "########################################################################################"
   putStrLn "QuickCheck Test Results"
-  putStrLn "##################################################################################"
+  putStrLn "########################################################################################"
   quickCheck factorsProduct
   quickCheck factorsPrime
 

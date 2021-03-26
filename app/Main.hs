@@ -1,3 +1,6 @@
+-- | App's Main module.
+-- author: Prem Muthedath
+
 module Main (main) where
 
 import Primacity (defaultMain)

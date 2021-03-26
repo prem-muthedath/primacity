@@ -17,7 +17,7 @@
 --
 --   for details, see ~/software-development/notes/facebook-hackathon-2015.pages
 --
---   author & source: /u/ Siddhanathan @ https://goo.gl/Yv4XMh (stackoverflow).
+--   author & source: /u/ Siddhanathan @ https://counto.gl/Yv4XMh (stackoverflow).
 --   prem: fixed issues raised by ghc warnings -- 11 MAR 2021.
 
 -- NOTE:
@@ -28,7 +28,7 @@
 --  import Control.Applicative ( pure, (<$>) )
 --  import Data.Monoid         ( (<>) )
 
-module Primacity (defaultMain, primacitys, primeFactors) where
+module Primacity (defaultMain, primacityCounts, primeFactors) where
 
 import Data.List           ( nub )
 
@@ -58,10 +58,10 @@ primeFactors n = factors n primes
 primacity :: (Integral i) => i -> Int
 primacity = length . nub . primeFactors
 
-primacitys :: [(Int, Int, Int)] -> [Int]
-primacitys xs = map (\x -> go x) xs
-  where go :: (Int, Int, Int) -> Int
-        go (a, b, k) = length . filter (== k) . fmap primacity $ [a..b]
+primacityCounts :: [(Int, Int, Int)] -> [Int]
+primacityCounts xs = map (\x -> count x) xs
+  where count :: (Int, Int, Int) -> Int
+        count (a, b, k) = length . filter (== k) . fmap primacity $ [a..b]
 
 user :: IO Int
 user = do
@@ -72,7 +72,7 @@ user = do
   let a :: Int = read . takeWhile (/=' ') . dropN 0 $ xs
   let b :: Int = read . takeWhile (/=' ') . dropN 1 $ xs
   let k :: Int = read . takeWhile (/=' ') . dropN 2 $ xs
-  let n = head $ primacitys [(a, b, k)]
+  let n = head $ primacityCounts [(a, b, k)]
   pure n
     -- prem: + dropN type-signature
     where dropN :: Int -> [Char] -> [Char]

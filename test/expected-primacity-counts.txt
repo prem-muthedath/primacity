@@ -1,6 +1,6 @@
--- expected primacity values corresponding to test cases in test-cases.txt.
+-- expected primacity counts corresponding to test cases in test-cases.txt.
 -- lines that begin with `--`, such as this one, are comments.
--- each non-comment line contains expected primacity value for it's corresponding test case.
+-- each non-comment line contains expected primacity count for it's corresponding test case.
 -- source: https://pastebin.com/60yhTXsR (anirudh rayabharam).
 Case #1: 5
 Case #2: 7
