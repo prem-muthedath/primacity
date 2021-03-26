@@ -39,13 +39,19 @@ testCase line
 anExpected :: String -> Maybe String
 anExpected line = do
       xs <- stripPrefix "Case #" line
-      ys <- anExpected' xs
-      return ys
-  where anExpected' :: String -> Maybe String
-        anExpected' ys = let zs     = dropWhile (/=':') ys
-                             prefix = take 2 zs
-                             valid  = (zs /= ys) && (prefix == ": ")
-                         in if valid then Just $ drop 2 zs else Nothing
+      ys <- stripPrefix' xs
+      zs <- stripPrefix ": " ys
+      return zs
+  where stripPrefix' :: String -> Maybe String
+        stripPrefix' str
+                | prefix' str /= [] = Just $ suffix' str
+                | otherwise         = Nothing
+        cond :: Char -> Bool
+        cond = (/=':')
+        prefix' :: String -> String
+        prefix' = takeWhile cond
+        suffix' :: String -> String
+        suffix' = dropWhile cond
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
