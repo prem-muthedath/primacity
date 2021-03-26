@@ -55,7 +55,7 @@ getInput = do
 
 getOutput :: IO [Int]
 getOutput = do
-  contents <- readFile "./test/output.txt"
+  contents <- readFile "./test/expected-output.txt"
   let pLines = get contents parseOutputLine
   return $ map (\x -> read x :: Int) pLines
 
