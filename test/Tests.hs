@@ -7,7 +7,7 @@ module Tests (run) where
 
 import Test.QuickCheck
 
-import Data.List (zipWith4, stripPrefix)
+import Data.List (zipWith4, stripPrefix, find)
 
 import Properties (factorsProduct, factorsPrime)
 import Primacity (primacityCounts)
@@ -39,19 +39,13 @@ testCase line
 anExpected :: String -> Maybe String
 anExpected line = do
       xs <- stripPrefix "Case #" line
-      ys <- stripPrefix' xs
+      ys <- suffixBeginsWith ':' xs
       zs <- stripPrefix ": " ys
       return zs
-  where stripPrefix' :: String -> Maybe String
-        stripPrefix' str
-                | prefix' str /= [] = Just $ suffix' str
-                | otherwise         = Nothing
-        cond :: Char -> Bool
-        cond = (/=':')
-        prefix' :: String -> String
-        prefix' = takeWhile cond
-        suffix' :: String -> String
-        suffix' = dropWhile cond
+  where suffixBeginsWith :: Char -> String -> Maybe String
+        suffixBeginsWith char str = do
+              _ <- find (==char) str
+              return $ dropWhile (/=char) str
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
@@ -63,14 +57,14 @@ parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
 
 type TestCase = (Int, Int, Int)   -- primacity count test case
 
--- | return list of primacity test cases, each of type `TestCase`.
+-- | list of primacity test cases, each of type `TestCase`.
 testCases :: IO [TestCase]
 testCases = do
   contents <- readFile "./test/test-cases.txt"
   let pLines = parse contents testCase
   return $ map (\line -> read $ "(" ++ line ++ ")" :: TestCase) pLines
 
--- | return expected primacity counts.
+-- | expected primacity counts.
 expected :: IO [Int]
 expected = do
   contents <- readFile "./test/expected-primacity-counts.txt"
@@ -91,7 +85,7 @@ type CaseNo   = Int   -- test case number
 type Actual   = Int   -- actual primacity count
 type Expected = Int   -- expected primacity count
 
--- | format & print primacity test results.
+-- | format & print primacity count test results.
 printResults :: [(CaseNo, TestCase, Actual, Expected)] -> IO ()
 printResults vals = do
   putStrLn "#######################################################################################"
@@ -99,7 +93,7 @@ printResults vals = do
   putStrLn "#######################################################################################"
   mapM_(\(n, x, y, z) -> putStrLn $
       "Test case #" ++  show n ++ ": " ++
-      show x ++ " | " ++
+      show x ++ " | "  ++
       show y ++ " | "  ++
       show z ++ " | "  ++
       if (y==z) then "PASS" else "FAIL") vals
