@@ -28,7 +28,7 @@
 --  import Control.Applicative ( pure, (<$>) )
 --  import Data.Monoid         ( (<>) )
 
-module Primacity where
+module Primacity (defaultMain, primacitys, primeFactors) where
 
 import Data.List           ( nub )
 
@@ -73,7 +73,6 @@ user = do
   let b :: Int = read . takeWhile (/=' ') . dropN 1 $ xs
   let k :: Int = read . takeWhile (/=' ') . dropN 2 $ xs
   let n = head $ primacitys [(a, b, k)]
-  -- let n = length . filter (== k) . fmap primacity $ [a..b]
   pure n
     -- prem: + dropN type-signature
     where dropN :: Int -> [Char] -> [Char]
