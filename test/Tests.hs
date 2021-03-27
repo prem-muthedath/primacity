@@ -16,7 +16,7 @@ import Headers (pcHeader, qcHeader)
 -- | parse line & return expected primacity count for a test case as string.
 -- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the
 -- primacity count, can have any number of digits. example: `Case #10: 691209`.
--- we want to extract & return `y`, the primacity count.
+-- we want to extract & return `y`, the primacity count, as a string.
 anExpected :: String -> Maybe String
 anExpected line = do
       xs <- stripPrefix "Case #" line
