@@ -82,7 +82,7 @@ expected = do
 
 type TestCase = (Int, Int, Int)   -- primacity count test case
 
--- | list of primacity count test cases, each of type `TestCase`.
+-- | primacity count test cases, each of type `TestCase`.
 testCases :: IO [TestCase]
 testCases = do
   contents <- readFile "./test/primacity-count-test-cases.txt"
