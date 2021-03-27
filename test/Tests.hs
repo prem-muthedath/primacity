@@ -90,15 +90,15 @@ testCases = do
   return $ map (\line -> read $ "(" ++ line ++ ")" :: TestCase) pLines
 
 -- | run quick check tests.
-qcTests :: IO ()
-qcTests = do
+quickCheckTests :: IO ()
+quickCheckTests = do
   qcHeader
   quickCheck factorsProduct
   quickCheck factorsPrime
 
 -- | run primacity count tests.
-primacityTests :: IO ()
-primacityTests = do
+primacityCountTests :: IO ()
+primacityCountTests = do
   xs <- testCases
   zs <- expected
   let ys :: [Int] = primacityCounts xs
@@ -108,6 +108,6 @@ primacityTests = do
 -- | run all tests.
 run :: IO ()
 run = do
-  primacityTests
-  qcTests
+  primacityCountTests
+  quickCheckTests
 
