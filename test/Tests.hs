@@ -38,8 +38,10 @@ testCase line
           | otherwise = Nothing
   where valid :: Bool
         valid = length (words line) == 3  -- example pattern: "156 287 6"
+        line' :: String
+        line' = unwords . words $ line    -- reduce consecutive spaces to 1
         replace :: String
-        replace = concatMap (\x -> if x == ' ' then "," else [x]) line
+        replace = concatMap (\x -> if x == ' ' then "," else [x]) line'
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
