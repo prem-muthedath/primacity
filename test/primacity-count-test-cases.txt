@@ -2,6 +2,7 @@
 -- lines that begin with `--`, such as this one, are comments.
 -- each non-comment line represents a unique test case.
 -- test case data order: A, B, K, where we want count of numbers in [A, B] with primacity K.
+-- data constraints: 2 <= A <= B, K >= 1. A, B, K are all integers.
 -- NOTE: to avoid parse & test failures, please do not alter this file in any way.
 -- source: https://pastebin.com/tUftWCVR (anirudh rayabharam).
 -- 100 --> no of test cases in this file.
