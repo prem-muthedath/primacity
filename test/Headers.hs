@@ -11,7 +11,7 @@ pcCaption = "PRIMACITY COUNT TEST RESULTS -- Test case # : (a, b, k) | actual | 
 qcCaption :: String
 qcCaption = "QuickCheck Test Results"
 
--- max caption size.
+-- | max caption size.
 maxSize :: Int
 maxSize = max (length pcCaption) (length qcCaption)
 
