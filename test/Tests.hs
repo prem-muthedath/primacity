@@ -33,9 +33,10 @@ testCase line
         replace :: String
         replace = concatMap (\x -> if x == ' ' then "," else [x]) line
 
--- | return expected primacity count for a test case from a line of text.
+-- | return test case's expected primacity count as string from a line of text.
 -- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the 
 -- primacity count, can have any number of digits. example: `Case #10: 691209`.
+-- we want to extract & return `y`, the primacity count.
 anExpected :: String -> Maybe String
 anExpected line = do
       xs <- stripPrefix "Case #" line
