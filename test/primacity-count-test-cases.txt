@@ -1,4 +1,4 @@
--- primacity test cases.
+-- primacity count test cases.
 -- lines that begin with `--`, such as this one, are comments.
 -- each non-comment line represents a unique test case.
 -- test case data order: A, B, K, where we want count of numbers in [A, B] with primacity K.

@@ -13,8 +13,8 @@ import Primacity (primacityCounts)
 import Properties (factorsProduct, factorsPrime)
 import Headers (pcHeader, qcHeader)
 
--- | return test case's expected primacity count as string from a line of text.
--- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the 
+-- | parse line & return expected primacity count for a test case as string.
+-- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the
 -- primacity count, can have any number of digits. example: `Case #10: 691209`.
 -- we want to extract & return `y`, the primacity count.
 anExpected :: String -> Maybe String
@@ -28,7 +28,7 @@ anExpected line = do
               _ <- find (==char) str
               return $ dropWhile (/=char) str
 
--- | return primacity test case as a comma-delimited string from a line of text.
+-- | parse line & return primacity count test case as a comma-delimited string.
 -- line pattern: `x y z` where x, y, z are numbers with any number of digits.
 -- example: `1673990 4964281 4`. we want to extract this pattern as "x,y,z".
 -- NOTE: `x y z` means numbers in [`x`..`y`] with primacity `z`.
@@ -82,10 +82,10 @@ expected = do
 
 type TestCase = (Int, Int, Int)   -- primacity count test case
 
--- | list of primacity test cases, each of type `TestCase`.
+-- | list of primacity count test cases, each of type `TestCase`.
 testCases :: IO [TestCase]
 testCases = do
-  contents <- readFile "./test/test-cases.txt"
+  contents <- readFile "./test/primacity-count-test-cases.txt"
   let pLines = parse contents testCase
   return $ map (\line -> read $ "(" ++ line ++ ")" :: TestCase) pLines
 
