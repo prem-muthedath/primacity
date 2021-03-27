@@ -9,8 +9,9 @@ import Test.QuickCheck
 
 import Data.List (zipWith4, stripPrefix, find)
 
-import Properties (factorsProduct, factorsPrime)
 import Primacity (primacityCounts)
+import Properties (factorsProduct, factorsPrime)
+import Headers (pcHeader, qcHeader)
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
@@ -89,9 +90,7 @@ type Expected = Int   -- expected primacity count
 -- | format & print primacity count test results.
 printResults :: [(CaseNo, TestCase, Actual, Expected)] -> IO ()
 printResults vals = do
-  putStrLn "#######################################################################################"
-  putStrLn "PRIMACITY COUNT TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL"
-  putStrLn "#######################################################################################"
+  pcHeader
   mapM_(\(n, x, y, z) -> putStrLn $
       "Test case #" ++  show n ++ ": " ++
       show x ++ " | "  ++
@@ -102,9 +101,7 @@ printResults vals = do
 -- | run quick check tests.
 qcTests :: IO ()
 qcTests = do
-  putStrLn "#######################################################################################"
-  putStrLn "QuickCheck Test Results"
-  putStrLn "#######################################################################################"
+  qcHeader
   quickCheck factorsProduct
   quickCheck factorsPrime
 
