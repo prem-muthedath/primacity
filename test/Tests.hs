@@ -34,14 +34,12 @@ anExpected line = do
 -- NOTE: `x y z` means numbers in [`x`..`y`] with primacity `z`.
 testCase :: String -> Maybe String
 testCase line
-          | valid     = Just $ replace
+          | valid     = Just $ replace . unwords . words $ line
           | otherwise = Nothing
   where valid :: Bool
         valid = length (words line) == 3  -- example pattern: "156 287 6"
-        line' :: String
-        line' = unwords . words $ line    -- reduce consecutive spaces to 1
-        replace :: String
-        replace = concatMap (\x -> if x == ' ' then "," else [x]) line'
+        replace :: String -> String
+        replace = concatMap (\x -> if x == ' ' then "," else [x])
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
