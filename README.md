@@ -19,8 +19,8 @@ EXECUTION STEPS:
 HOW TO RUN THE PROGRAM AND TESTS:
   1. `cd` to `primacity` -- the top directory containing this `README` file.
   2. to run in interactive mode, type below command and press `ENTER`:
-        `cabal v2-run :primacity`
+        - `cabal v2-run :primacity`
   3. to run all tests (this takes a while), type below command & press `ENTER`:
-        `cabal v2-run :primacity-test`
+        - `cabal v2-run :primacity-test`
 
 
