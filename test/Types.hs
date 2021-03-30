@@ -32,20 +32,33 @@ instance Show Message where
 
 -- | message for `BadFormat`.
 msgBF :: String -> String
-msgBF line = "file parse failed at line:" ++ "\n" ++ line ++ "\n"
-  ++ "reason: line violates specified data pattern. "
-  ++ "check '" ++ testCasesFile ++ "', '" ++ primacityCountsFile ++ "' files "
-  ++ "for the failed line as well as for data-pattern specification."
+msgBF line = "file parse failed at line:"
+  ++ "\n"
+  ++ line
+  ++ "\n"
+  ++ "reason: line violates specified data pattern. check '"
+  ++ testCasesFile
+  ++ "', '"
+  ++ primacityCountsFile
+  ++ "' files for the failed line as well as for data-pattern specification."
 
 -- | message for `BadPC`.
 msgPC :: String -> String
-msgPC line = "'" ++ primacityCountsFile
-  ++ "' parse failed at line:" ++ "\n" ++ line ++ "\n"
+msgPC line = "'"
+  ++ primacityCountsFile
+  ++ "' parse failed at line:"
+  ++ "\n"
+  ++ line
+  ++ "\n"
   ++ "reason: non-integer primacity count found."
 
 -- | message for `BadTC`.
 msgTC :: String -> String
-msgTC line = "'" ++ testCasesFile
-  ++ "' parse failed at line:" ++ "\n" ++ replace ',' " " line ++ "\n"
+msgTC line = "'"
+  ++ testCasesFile
+  ++ "' parse failed at line:"
+  ++ "\n"
+  ++ replace ',' " " line
+  ++ "\n"
   ++ "reason: non-integer(s) found in test case."
 
