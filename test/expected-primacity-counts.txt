@@ -4,10 +4,11 @@
 -- expected primacity count should always be an integer >= 0.
 -- line data format specification (fixed):
 --    1. "Case #x: y"
---    2. `x`, the test case number, is any integer in [1, 100].
---    3. `y`, the expected primacity count, can be any integer >= 0.
---    4. all spaces are single spaces. these spaces are MANDATORY.
---    5. leading & trailing spaces are NOT allowed.
+--    2. NOTE: double quotes in (1) are for illustration only -- not part of data.
+--    3. `x`, the test case number, is any integer in [1, 100].
+--    4. `y`, the expected primacity count, can be any integer >= 0.
+--    5. all spaces are single spaces. these spaces are MANDATORY.
+--    6. leading & trailing spaces are NOT allowed.
 -- NOTE: to avoid parse & test failures, please do not alter this file in any way.
 -- source: https://pastebin.com/60yhTXsR (anirudh rayabharam).
 Case #1: 5
