@@ -18,26 +18,34 @@ type CaseNo   = Int   -- test case number
 type Actual   = Int   -- actual primacity count
 type Expected = Int   -- expected primacity count
 
-data Message = Format String | PcFormat String | TcFormat String
+-- | data type for parser error messages.
+-- `BadFormat` -> generic constructor for bad line format message.
+-- `BadPC`     -> constructor for non-integer primacity count message.
+-- `BadTC`     -> constructor for non-integer(s) test case message.
+data Message = BadFormat String | BadPC String | BadTC String
 
+-- | `Show` instance for `Message`.
 instance Show Message where
-  show (Format xs)   = msgF xs
-  show (PcFormat xs) = msgPc xs
-  show (TcFormat xs) = msgTc xs
+  show (BadFormat xs) = msgF xs
+  show (BadPC xs)     = msgPC xs
+  show (BadTC xs)     = msgTC xs
 
+-- | message for `BadFormat`.
 msgF :: String -> String
-msgF line = "file parse failed at line: " ++ line ++ "\n"
+msgF line = "file parse failed at line:" ++ "\n" ++ line ++ "\n"
   ++ "reason: line violates specified data pattern. "
-  ++ "check '" ++ testCasesFile ++ "', '" ++ primacityCountsFile
-  ++ "' for line & specifications."
+  ++ "check '" ++ testCasesFile ++ "', '" ++ primacityCountsFile ++ "' files "
+  ++ "for the failed line as well as for data-pattern specification."
 
-msgPc :: String -> String
-msgPc line = "'" ++ primacityCountsFile
-  ++ "' parse failed at line: " ++ line ++ "\n"
-  ++ "reason: non-integer found."
+-- | message for `BadPC`.
+msgPC :: String -> String
+msgPC line = "'" ++ primacityCountsFile
+  ++ "' parse failed at line:" ++ "\n" ++ line ++ "\n"
+  ++ "reason: non-integer primacity count found."
 
-msgTc :: String -> String
-msgTc line = "'" ++ testCasesFile
-  ++ "' parse failed at line: " ++ replace ',' " " line ++ "\n"
-  ++ "reason: non-integer(s) found."
+-- | message for `BadTC`.
+msgTC :: String -> String
+msgTC line = "'" ++ testCasesFile
+  ++ "' parse failed at line:" ++ "\n" ++ replace ',' " " line ++ "\n"
+  ++ "reason: non-integer(s) found in test case."
 

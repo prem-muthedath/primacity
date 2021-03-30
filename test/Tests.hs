@@ -54,7 +54,7 @@ parseLine _ []          = []   -- ignore blank
 parseLine _ ('-':'-':_) = []   -- ignore comment
 parseLine f line = case (f line) of
                       Just x  -> x
-                      Nothing -> error . show $ Format line
+                      Nothing -> error . show $ BadFormat line
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
@@ -83,7 +83,7 @@ expected = do
   return $ map (\x ->
     case readMaybe x :: Maybe Int of
       Just y  -> y
-      Nothing -> error . show $ PcFormat x
+      Nothing -> error . show $ BadPC x
     ) pLines
 
 -- | primacity count test cases, each of type `TestCase`.
@@ -94,7 +94,7 @@ testCases = do
   return $ map (\x ->
     case readMaybe $ "(" ++ x ++ ")" :: Maybe TestCase of
       Just y  -> y
-      Nothing -> error . show $ TcFormat x
+      Nothing -> error . show $ BadTC x
     ) pLines
 
 -- | run quick check tests.
