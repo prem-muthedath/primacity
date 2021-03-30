@@ -76,12 +76,12 @@ printResults vals = do
       if (y==z) then "PASS" else "FAIL") vals
 
 -- | expected primacity counts.
-expected :: IO [Int]
+expected :: IO [Expected]
 expected = do
   contents <- readFile primacityCountsFile
   let pLines = parse contents anExpected
   return $ map (\x ->
-    case readMaybe x :: Maybe Int of
+    case readMaybe x :: Maybe Expected of
       Just y  -> y
       Nothing -> error . show $ BadPC x
     ) pLines
