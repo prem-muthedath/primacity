@@ -65,7 +65,7 @@ parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
         nonempty = filter (/="")
 
 -- | format & print primacity count test results.
-printResults :: [(CaseNo, TestCase, Actual, Expected)] -> IO ()
+printResults :: [(TestCaseNo, TestCase, Actual, Expected)] -> IO ()
 printResults vals = do
   pcHeader
   mapM_(\(n, x, y, z) -> putStrLn $
@@ -107,10 +107,10 @@ quickCheckTests = do
 -- | run primacity count tests.
 primacityCountTests :: IO ()
 primacityCountTests = do
-  xs <- testCases
-  zs <- expected
-  let ys :: [Int] = primacityCounts xs
-      results     = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
+  xs :: [TestCase] <- testCases
+  zs :: [Expected] <- expected
+  let ys :: [Actual] = primacityCounts xs
+      results        = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
   printResults results
 
 -- | run all tests.
