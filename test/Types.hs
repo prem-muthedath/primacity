@@ -26,13 +26,13 @@ data Message = BadFormat String | BadPC String | BadTC String
 
 -- | `Show` instance for `Message`.
 instance Show Message where
-  show (BadFormat xs) = msgF xs
+  show (BadFormat xs) = msgBF xs
   show (BadPC xs)     = msgPC xs
   show (BadTC xs)     = msgTC xs
 
 -- | message for `BadFormat`.
-msgF :: String -> String
-msgF line = "file parse failed at line:" ++ "\n" ++ line ++ "\n"
+msgBF :: String -> String
+msgBF line = "file parse failed at line:" ++ "\n" ++ line ++ "\n"
   ++ "reason: line violates specified data pattern. "
   ++ "check '" ++ testCasesFile ++ "', '" ++ primacityCountsFile ++ "' files "
   ++ "for the failed line as well as for data-pattern specification."
