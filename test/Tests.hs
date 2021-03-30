@@ -7,39 +7,46 @@ module Tests (run) where
 
 import Test.QuickCheck
 
+import Text.Read (readMaybe)
 import Data.List (zipWith4, stripPrefix, find)
 
+import Types
+import Inputs (testCasesFile, primacityCountsFile)
+import Common (hasWordCount, replace, singleSpaced)
 import Primacity (primacityCounts)
 import Properties (factorsProduct, factorsPrime)
 import Headers (pcHeader, qcHeader)
 
 -- | parse line & return expected primacity count for a test case as string.
--- line pattern: `Case #x: y` where `x` is a number in [1..100] & `y`, the
--- primacity count, can have any number of digits. example: `Case #10: 691209`.
--- we want to extract & return `y`, the primacity count, as a string.
+-- line pattern: `Case #x: y` where `x`, the test case number, is an integer in 
+-- [1..100] & `y` can be any integer >=0. example: `"Case #10: 691209".  we want 
+-- to extract & return `y`, the expected primacity count, as a string.
 anExpected :: String -> Maybe String
 anExpected line = do
-      xs <- stripPrefix "Case #" line
-      ys <- suffixBeginsWith ':' xs
-      zs <- stripPrefix ": " ys
-      return zs
+      xs <- stripPrefix "Case #" line   -- strip "Case #" prefix
+      ys <- suffixBeginsWith ':' xs     -- fetch suffix that begins with ':'
+      zs <- stripPrefix ": " ys         -- strip prefix ": "
+      pc <- pcount zs                   -- extract expected primacity count
+      return pc
   where suffixBeginsWith :: Char -> String -> Maybe String
         suffixBeginsWith char str = do
               _ <- find (==char) str
               return $ dropWhile (/=char) str
+        pcount :: String -> Maybe String
+        pcount xs
+            | xs `hasWordCount` 1 = Just $ singleSpaced xs
+            | otherwise           = Nothing
 
 -- | parse line & return primacity count test case as a comma-delimited string.
--- line pattern: `x y z` where x, y, z are numbers with any number of digits.
--- example: `1673990 4964281 4`. we want to extract this pattern as "x,y,z".
--- NOTE: `x y z` means numbers in [`x`..`y`] with primacity `z`.
+-- line pattern: `x y z` where `x`, `y`, `z` are +ve integers with any number of 
+-- digits. example: "1673990 4964281 4". we want to extract this pattern as 
+-- "x,y,z".  NOTE: `x y z` means integers in [`x`..`y`] with primacity `z`.
 testCase :: String -> Maybe String
 testCase line
-          | valid     = Just $ replace . unwords . words $ line
+          | valid     = Just $ replace ' ' "," . singleSpaced $ line
           | otherwise = Nothing
   where valid :: Bool
-        valid = length (words line) == 3  -- example pattern: "156 287 6"
-        replace :: String -> String
-        replace = concatMap (\x -> if x == ' ' then "," else [x])
+        valid = line `hasWordCount` 3  -- example pattern: "156 287 6"
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
@@ -47,7 +54,7 @@ parseLine _ []          = []   -- ignore blank
 parseLine _ ('-':'-':_) = []   -- ignore comment
 parseLine f line = case (f line) of
                       Just x  -> x
-                      Nothing -> error $ "parse failed at line: " ++ line
+                      Nothing -> error . show $ Format line
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
@@ -56,11 +63,6 @@ parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
         allLines = lines contents
         nonempty :: [String]-> [String]
         nonempty = filter (/="")
-
--- | some type synonyms to make the code clear.
-type CaseNo   = Int   -- test case number
-type Actual   = Int   -- actual primacity count
-type Expected = Int   -- expected primacity count
 
 -- | format & print primacity count test results.
 printResults :: [(CaseNo, TestCase, Actual, Expected)] -> IO ()
@@ -76,18 +78,24 @@ printResults vals = do
 -- | expected primacity counts.
 expected :: IO [Int]
 expected = do
-  contents <- readFile "./test/expected-primacity-counts.txt"
+  contents <- readFile primacityCountsFile
   let pLines = parse contents anExpected
-  return $ map (\x -> read x :: Int) pLines
-
-type TestCase = (Int, Int, Int)   -- primacity count test case
+  return $ map (\x ->
+    case readMaybe x :: Maybe Int of
+      Just y  -> y
+      Nothing -> error . show $ PcFormat x
+    ) pLines
 
 -- | primacity count test cases, each of type `TestCase`.
 testCases :: IO [TestCase]
 testCases = do
-  contents <- readFile "./test/primacity-count-test-cases.txt"
+  contents <- readFile testCasesFile
   let pLines = parse contents testCase
-  return $ map (\line -> read $ "(" ++ line ++ ")" :: TestCase) pLines
+  return $ map (\x ->
+    case readMaybe $ "(" ++ x ++ ")" :: Maybe TestCase of
+      Just y  -> y
+      Nothing -> error . show $ TcFormat x
+    ) pLines
 
 -- | run quick check tests.
 quickCheckTests :: IO ()

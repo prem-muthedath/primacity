@@ -1,6 +1,13 @@
 -- expected primacity counts corresponding to test cases in primacity-count-test-cases.txt.
 -- lines that begin with `--`, such as this one, are comments.
 -- each non-comment line contains expected primacity count for it's corresponding test case.
+-- expected primacity count should always be an integer >= 0.
+-- line data format specification (fixed):
+--    1. "Case #x: y"
+--    2. `x`, the test case number, is any integer in [1, 100].
+--    3. `y`, the expected primacity count, can be any integer >= 0.
+--    4. all spaces are single spaces. these spaces are MANDATORY.
+--    5. leading & trailing spaces are NOT allowed.
 -- NOTE: to avoid parse & test failures, please do not alter this file in any way.
 -- source: https://pastebin.com/60yhTXsR (anirudh rayabharam).
 Case #1: 5
