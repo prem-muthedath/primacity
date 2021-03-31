@@ -43,10 +43,12 @@ anExpected line = do
 -- "x,y,z".  NOTE: `x y z` means integers in [`x`..`y`] with primacity `z`.
 testCase :: String -> Maybe String
 testCase line
-          | valid     = Just $ replace ' ' "," . singleSpaced $ line
+          | valid     = Just $ format
           | otherwise = Nothing
   where valid :: Bool
         valid = line `hasWordCount` 3  -- example pattern: "156 287 6"
+        format :: String
+        format = replace ' ' "," . singleSpaced $ line
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
