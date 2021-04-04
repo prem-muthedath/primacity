@@ -107,4 +107,29 @@ test-suite primacity-test
     -- Compiler options
     ghc-options:      -O2 -fforce-recomp -Wall -Werror
 
+test-suite perf-test
+    -- .hs or .lhs file containing the Main module.
+    main-is:          Main.hs
+
+    -- Test suite interface
+    type:             exitcode-stdio-1.0
+
+    -- Modules included in this executable, other than Main.
+    other-modules:    Primacity
+
+    -- LANGUAGE extensions used by modules in this package.
+    other-extensions: ScopedTypeVariables
+
+    -- Other library packages from which modules are imported.
+    build-depends:    base ==4.14.1.0
+
+    -- Directories containing source files.
+    hs-source-dirs:   performance
+
+    -- Base language which the package is written in.
+    default-language: Haskell2010
+
+    -- Compiler options
+    ghc-options:      -O2 -fforce-recomp -Wall -Werror
+
 

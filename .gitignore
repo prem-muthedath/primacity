@@ -10,5 +10,7 @@
 !/*.cabal
 !/app/
 !/test/
+!/performance/
 !*.txt
+!*.lhs
 
