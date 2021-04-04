@@ -1,4 +1,4 @@
--- expected primacity counts corresponding to test cases in primacity-count-test-cases.txt.
+-- expected primacity counts corresponding to test cases in ./primacity-count-test-cases.txt.
 -- lines that begin with `--`, such as this one, are comments.
 -- each non-comment line contains expected primacity count for it's corresponding test case.
 -- expected primacity count should always be an integer >= 0.
