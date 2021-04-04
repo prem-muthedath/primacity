@@ -49,7 +49,10 @@ extra-source-files:
              cabal.project.freeze,
              test/primacity-count-test-cases.txt,
              test/expected-primacity-counts.txt,
-             test/sample-results.txt
+             test/sample-results.txt,
+             performance/cached-primes.lhs,
+             performance/uncached-primes.lhs,
+             performance/test-run-timings.lhs
 
 -- Compiler version
 tested-with: GHC == 8.10.4
