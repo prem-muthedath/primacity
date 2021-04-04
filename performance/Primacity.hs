@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
--- | test code to spot module-location performance problem (see ./Main.main).
+-- | test code to spot module-dependency performance problem (see ./Main.main).
 -- orig author: /u/ Siddhanathan @ https://goo.gl/Yv4XMh (stackoverflow).
 -- Prem Muthedath: spotted problem, designed test.
 -- this code is also @ https://pastebin.com/mBevWnT4

@@ -1,4 +1,4 @@
--- cached `primes` -- i.e., non-polymorphic -- run of 100 tests.
+-- app/Primacity.hs: cached `primes` -- i.e., non-polymorphic -- run of 100 tests.
 -- call sequence:
 --    1. primacity/test/Main.main
 --    2. primacity/test/Tests.run
@@ -9,7 +9,7 @@ real	11m58.131s
 user	11m54.086s
 sys	0m3.262s
 
--- uncached `primes` -- i.e., polymorphic -- run of 100 tests.
+-- app/Primacity.hs: uncached `primes` -- i.e., polymorphic -- run of 100 tests.
 -- call sequence:
 --    1. primacity/test/Main.main
 --    2. primacity/test/Tests.run
