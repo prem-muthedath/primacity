@@ -1,5 +1,6 @@
 -- | ghci debug output for ./Primacity.hs with polymorphic `primes`.
--- no caching whatsoever, including in recursive calls, of `primes`.
+-- goal: we want to test if haskell caches polymorphic `primes`.
+-- result: no caching whatsoever, including in recursive calls, of `primes`.
 -- author: Prem Muthedath, 03 APR 2021.
 -- *****************************************************************************
 *Primacity λ ▶▶ :step primacityCount [29,53] 1

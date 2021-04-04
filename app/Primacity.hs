@@ -53,9 +53,9 @@
 --       with concrete type signatures, haskell caches `primes` for all 
 --       computations, including all recursive calls as well as calls made 
 --       within `map` in `primacityCounts` (see ghci debug output, 
---       primacity/performance/cached-primes.lhs). this removes module-location 
---       behavior.  for example, above test case now runs in ~ 18 secs, whether 
---       or not `primacityCounts.count` is called from this module.
+--       primacity/performance/cached-primes.lhs). this solves the module-
+--       dependency issue. for example, above test case now runs in ~ 10 secs 
+--       whether or not `primacityCounts.count` is called from this module.
 --
 --       /u/ ski @ #haskell diagonized this problem and recommended solutions.
 --
@@ -117,7 +117,8 @@ primacityCounts xs = map (\x -> count x) xs
 -- | prompts user for `a b k` & computes primacity count in [a..b].
 user :: IO Int
 user = do
-  putStrLn "please input positive integers a, b, k, such that 2 <= a <= b and k >= 1, in the format: a b k"
+  putStr "please input positive integers a, b, k, such that 2 <= a <= b and k >= 1, in the format: a b k. "
+  putStrLn "the program will then output the count of integers in [a,b] with primacity k."
   xs <- getLine
   -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
@@ -144,7 +145,8 @@ printNTimes n total = do
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
 defaultMain :: IO ()
 defaultMain = do
-  putStrLn "please input a positive integer n -- the number of 'questions'"
+  putStr "please input a positive integer n (n >= 1) -- the number of 'questions'. "
+  putStrLn "the program will then prompt you `n` times for subsequent input."
   -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
   n :: Int <- read <$> getLine

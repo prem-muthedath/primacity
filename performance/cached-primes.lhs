@@ -1,9 +1,11 @@
--- | ghci debug output for ./Primacity.hs with [Int] `primes`.
--- `primes` always cached, including in all recursive calls.
+-- | ghci debug output for ./Primacity.hs with non-polymorphic `primes`.
+-- goal: we want to test if haskell caches non-polymorphic `primes`.
+-- result: non-polymorphic `primes` always cached, even in all recursive calls.
 -- author: Prem Muthedath, 03 APR 2021.
 -- NOTE: `primes` & most functions in ./Primacity.hs are polymorphic.  for this
--- test run, we just made `primes` & all functions non-polymorphic, all taking
--- Int and/or [Int] type arguments. after this test, we reverted the changes. 
+-- test run, we just made `primes` & all functions non-polymorphic, all with
+-- Int and/or [Int] type arguments & return values. after this test, 
+-- we reverted the changes.
 -- *****************************************************************************
 *Primacity λ ▶▶  :step primacityCount [29,53] 1 
 Stopped in Primacity.primacityCount, Primacity.hs:52:22-64
