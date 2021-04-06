@@ -120,7 +120,7 @@ primacityCounts = map (\x -> count x)
             where inRange :: Bool
                   inRange = and [(2 <= a), (a <= b), (k >= 1)]
                   msg :: String
-                  msg = "bad (a,b,k): " ++ show (a,b,k) ++ ". i need 2 <= a <= b, k >= 1."
+                  msg = "bad (a,b,k): " <> show (a,b,k) <> ". i need 2 <= a <= b, k >= 1."
 
 
 -- | all code from this point part of interactive mode. ------------------------
@@ -140,7 +140,7 @@ userFeed xs
                         k :: Int = read' . takeWhile (/=' ') . dropN 2 $ ys
                     in (a, b, k)
           msg :: String
-          msg = "your input '" ++ xs ++ "' is not in expected format: a b k"
+          msg = "your input '" <> xs <> "' is not in expected format: a b k"
           -- prem: + dropN type-signature
           dropN :: Int -> [Char] -> [Char]
           dropN 0 = id
@@ -158,7 +158,7 @@ user = do
 printNTimes :: Int -> IO ()
 printNTimes 0 = putStrLn "sorry, you do not have any questions."
 printNTimes n = do
-  putStrLn $ "thank you. i will now prompt you " ++ show n ++ " time(s) for data."
+  putStrLn $ "thank you. i will now prompt you " <> show n <> " time(s) for data."
   printNTimes' n n
   where printNTimes' :: Int -> Int -> IO ()
         printNTimes' 0 _     = pure ()
@@ -172,7 +172,7 @@ printNTimes n = do
 read' :: String -> Int
 read' xs = case readMaybe xs :: Maybe Int of
             Just x    -> x
-            Nothing   -> error $ "your input '" ++ xs ++ "' is not an integer."
+            Nothing   -> error $ "your input '" <> xs <> "' is not an integer."
 
 -- | start of interactive mode.
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
@@ -183,6 +183,6 @@ defaultMain = do
   -- https://tinyurl.com/2v2fx8d7 (so)
   n :: Int <- read' <$> getLine
   if n >= 0 then printNTimes n
-  else error $ "bad input: " ++ show n ++ ". i need a number >= 0."
+  else error $ "bad input: " <> show n <> ". i need a number >= 0."
 
 
