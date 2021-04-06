@@ -35,7 +35,7 @@
 --       this module-dependency problem.
 --
 --       `primacityCounts` did not exist in the original code. i wrote it as a 
---       hack to solve the module-location performance problem.  surprisingly, 
+--       hack to solve the module-dependency performance problem. surprisingly, 
 --       for yet unclear reasons, either because of inlining or specialization, 
 --       if `primacityCounts` located in this module is called, haskell computes 
 --       above test case in about ~18 secs, whether or not the call is made from 
@@ -74,6 +74,7 @@ module Primacity (
                  ) where
 
 import Data.List  ( nub )
+import Text.Read (readMaybe)
 
 -- | True if number is a prime.
 isPrime :: Int -> Bool
@@ -110,27 +111,47 @@ primacity = length . nub . primeFactors
 -- | given a list of (a, b, k), computes count of integers within each [a..b] 
 -- with primacity `k`, and returns list of all such counts.
 primacityCounts :: [(Int, Int, Int)] -> [Int]
-primacityCounts xs = map (\x -> count x) xs
+primacityCounts = map (\x -> count x)
   where count :: (Int, Int, Int) -> Int
-        count (a, b, k) = length . filter (== k) . fmap primacity $ [a..b]
+        count (a, b, k)
+            | inRange   = length . filter (== k) . fmap primacity $ [a..b]
+            | otherwise = error $ msg
+            where inRange :: Bool
+                  inRange = and [(2 <= a), (a <= b), (k >= 1)]
+                  msg :: String
+                  msg = "bad (a,b,k): " ++ show (a,b,k) ++ ". i need 2 <= a <= b, k >= 1."
 
--- | prompts user for `a b k` & computes primacity count in [a..b].
-user :: IO Int
-user = do
-  putStr "please input positive integers a, b, k, such that 2 <= a <= b and k >= 1, in the format: a b k. "
-  putStrLn "the program will then output the count of integers in [a,b] with primacity k."
-  xs <- getLine
-  -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
-  -- https://tinyurl.com/2v2fx8d7 (so)
-  let a :: Int = read . takeWhile (/=' ') . dropN 0 $ xs
-  let b :: Int = read . takeWhile (/=' ') . dropN 1 $ xs
-  let k :: Int = read . takeWhile (/=' ') . dropN 2 $ xs
-  let n = head $ primacityCounts [(a, b, k)]
-  pure n
-    -- prem: + dropN type-signature
-    where dropN :: Int -> [Char] -> [Char]
+
+-- | all code from this point part of interactive mode. ------------------------
+
+-- | user feed "a b k" as (a, b, k), a 3-tuple Int.
+userFeed :: String -> (Int, Int, Int)
+userFeed xs
+    | not3Words = error msg
+    | otherwise = feed . unwords . words $ xs
+    where not3Words :: Bool
+          not3Words = length (words xs) /= 3
+          feed :: String -> (Int, Int, Int)
+          -- pattern type signatures require `ScopedTypeVariables`; see /u/ 
+          -- jacob wang @ https://tinyurl.com/2v2fx8d7 (so)
+          feed ys = let a :: Int = read' . takeWhile (/=' ') . dropN 0 $ ys
+                        b :: Int = read' . takeWhile (/=' ') . dropN 1 $ ys
+                        k :: Int = read' . takeWhile (/=' ') . dropN 2 $ ys
+                    in (a, b, k)
+          msg :: String
+          msg = "your input '" ++ xs ++ "' is not in expected format: a b k"
+          -- prem: + dropN type-signature
+          dropN :: Int -> [Char] -> [Char]
           dropN 0 = id
           dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
+
+-- | prompts user for `a b k` & computes primacity count in [a..b] for k.
+user :: IO Int
+user = do
+  putStrLn "please enter integers a, b, k, where 2 <= a <= b and k >= 1, in the format: a b k"
+  xs <- getLine
+  let n = head $ primacityCounts [userFeed xs]
+  pure n
 
 -- | calls `user` `n` times; formats & prints result after each call.
 printNTimes :: Int -> Int -> IO ()
@@ -141,15 +162,28 @@ printNTimes n total = do
   putStrLn $ show ans
   printNTimes (pred n) total
 
+-- | `printNTimes` wrapper; processes n=0 case & informs user of next steps.
+printNTimes' :: Int -> IO ()
+printNTimes' 0 = putStrLn "sorry, you do not have any questions."
+printNTimes' n = do
+  putStrLn $ "thank you. i will now prompt you " ++ show n ++ " time(s) for data."
+  printNTimes n n
+
+-- | reads a string as Int; errors on bad conversion.
+read' :: String -> Int
+read' xs = case readMaybe xs :: Maybe Int of
+            Just x    -> x
+            Nothing   -> error $ "your input '" ++ xs ++ "' is not an integer."
+
 -- | start of interactive mode.
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
 defaultMain :: IO ()
 defaultMain = do
-  putStr "please input a positive integer n (n >= 1) -- the number of 'questions'. "
-  putStrLn "the program will then prompt you `n` times for subsequent input."
+  putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 0"
   -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
-  n :: Int <- read <$> getLine
-  printNTimes n n
+  n :: Int <- read' <$> getLine
+  if n >= 0 then printNTimes' n
+  else error $ "bad input: " ++ show n ++ ". i need a number >= 0."
 
 
