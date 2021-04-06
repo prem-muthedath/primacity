@@ -155,22 +155,20 @@ user = do
   pure n
 
 -- | calls `user` `n` times; formats & prints result after each call.
-printNTimes :: Int -> Int -> IO ()
-printNTimes 0 _ = pure ()
-printNTimes n total = do
-  ans <- user
-  putStr $ "Case #" <> show (total - n + 1) <> ": "
-  putStrLn $ show ans
-  printNTimes (pred n) total
-
--- | `printNTimes` wrapper; processes n=0 case & informs user of next steps.
-printNTimes' :: Int -> IO ()
-printNTimes' 0 = putStrLn "sorry, you do not have any questions."
-printNTimes' n = do
+printNTimes :: Int -> IO ()
+printNTimes 0 = putStrLn "sorry, you do not have any questions."
+printNTimes n = do
   putStrLn $ "thank you. i will now prompt you " ++ show n ++ " time(s) for data."
-  printNTimes n n
+  printNTimes' n n
+  where printNTimes' :: Int -> Int -> IO ()
+        printNTimes' 0 _     = pure ()
+        printNTimes' m total = do
+          ans <- user
+          putStr $ "Case #" <> show (total - m + 1) <> ": "
+          putStrLn $ show ans
+          printNTimes' (pred m) total
 
--- | reads a string as Int; errors on bad conversion.
+-- | reads string as Int; errors on bad conversion.
 read' :: String -> Int
 read' xs = case readMaybe xs :: Maybe Int of
             Just x    -> x
@@ -184,7 +182,7 @@ defaultMain = do
   -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
   n :: Int <- read' <$> getLine
-  if n >= 0 then printNTimes' n
+  if n >= 0 then printNTimes n
   else error $ "bad input: " ++ show n ++ ". i need a number >= 0."
 
 
