@@ -69,8 +69,7 @@
 
 module Primacity (
                   defaultMain,
-                  primacityCounts,
-                  primeFactors
+                  primacityCounts
                  ) where
 
 import Data.List  ( nub )

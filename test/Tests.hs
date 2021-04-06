@@ -5,8 +5,6 @@
 
 module Tests (run) where
 
-import Test.QuickCheck
-
 import Text.Read (readMaybe)
 import Data.List (zipWith4, stripPrefix, find)
 
@@ -14,8 +12,7 @@ import Types
 import Inputs (testCasesFile, primacityCountsFile)
 import Common (hasWordCount, replace, singleSpaced)
 import Primacity (primacityCounts)
-import Properties (factorsProduct, factorsPrime)
-import Headers (pcHeader, qcHeader)
+import Headers (pcHeader)
 
 -- | parse line & return expected primacity count for a test case as string.
 -- line pattern: `Case #x: y` where `x`, the test case number, is an integer in 
@@ -99,13 +96,6 @@ testCases = do
       Nothing -> error . show $ BadTC x
     ) pLines
 
--- | run quick check tests.
-quickCheckTests :: IO ()
-quickCheckTests = do
-  qcHeader
-  quickCheck factorsProduct
-  quickCheck factorsPrime
-
 -- | run primacity count tests.
 primacityCountTests :: IO ()
 primacityCountTests = do
@@ -119,5 +109,4 @@ primacityCountTests = do
 run :: IO ()
 run = do
   primacityCountTests
-  quickCheckTests
 
