@@ -2,7 +2,7 @@
 
 -- | Primacity module -- contains all code for primacity calculations.
 -- author : /u/ Siddhanathan @ https://counto.gl/Yv4XMh (stackoverflow).
--- Prem Muthedath: performance fix, documentation, cabal packaging.
+-- Prem Muthedath: performance fix, error checks, doc, cabal packaging.
 
 -- this code solves (fast) the primacity problem in facebook hackathon 2015. for 
 -- details, see ~/software-development/notes/facebook-hackathon-2015.pages
@@ -47,7 +47,7 @@
 --       only a half measure, since defining `primes` polymorphically is not 
 --       good practice (REF: /u/ ski @ #haskell).
 --
---       so `primes` is no longer polymorphic.  and for rest of the code to type 
+--       so `primes` is no longer polymorphic. and for rest of the code to type 
 --       check, all other functions are also no longer polymorphic.
 --
 --       with concrete type signatures, haskell caches `primes` for all 
@@ -110,6 +110,7 @@ primacity = length . nub . primeFactors
 
 -- | given a list of (a, b, k), computes count of integers within each [a..b] 
 -- with primacity `k`, and returns list of all such counts.
+-- author: Prem Muthedath.
 primacityCounts :: [(Int, Int, Int)] -> [Int]
 primacityCounts = map (\x -> count x)
   where count :: (Int, Int, Int) -> Int
