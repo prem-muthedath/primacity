@@ -121,8 +121,7 @@ primacityCounts = map (\x -> count x)
                   msg :: String
                   msg = "bad (a,b,k): " <> show (a,b,k) <> ". i need 2 <= a <= b, k >= 1."
 
-
--- | all code from this point part of interactive mode. ------------------------
+-- | all code from this point on is part of interactive mode. ------------------
 
 -- | user feed "a b k" as (a, b, k), a 3-tuple Int.
 userFeed :: String -> (Int, Int, Int)
