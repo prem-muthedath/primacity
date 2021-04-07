@@ -60,10 +60,13 @@
 --       /u/ ski @ #haskell diagonized this problem and recommended solutions.
 --
 -- NOTE:
---  with base-4.8, Prelude re-exports a few more entities from modules such as 
---  Data.Monoid and Control.Applicative, which makes below 2 imports in the 
---  original code redundant.
---  REF: see https://gitlab.haskell.org/ghc/ghc/-/wikis/migration/7.10
+--  1. pattern type signatures (examples: `let x :: Int = ...`, `x :: Int <- 
+--     getLine`) require `ScopedTypeVariables`; see /u/ jacob wang @ 
+--     https://tinyurl.com/2v2fx8d7 (so)
+--  2. with base-4.8, Prelude re-exports a few more entities from modules such 
+--     as Data.Monoid and Control.Applicative, which makes below 2 imports in 
+--     the original code redundant.
+--     REF: see https://gitlab.haskell.org/ghc/ghc/-/wikis/migration/7.10
 --  import Control.Applicative ( pure, (<$>) )
 --  import Data.Monoid         ( (<>) )
 
@@ -131,16 +134,13 @@ userFeed xs
     where not3Words :: Bool
           not3Words = length (words xs) /= 3
           feed :: String -> (Int, Int, Int)
-          -- pattern type signatures require `ScopedTypeVariables`; see /u/ 
-          -- jacob wang @ https://tinyurl.com/2v2fx8d7 (so)
           feed ys = let a :: Int = read' . takeWhile (/=' ') . dropN 0 $ ys
                         b :: Int = read' . takeWhile (/=' ') . dropN 1 $ ys
                         k :: Int = read' . takeWhile (/=' ') . dropN 2 $ ys
                     in (a, b, k)
           msg :: String
           msg = "your input '" <> xs <> "' is not in expected format: a b k"
-          -- prem: + dropN type-signature
-          dropN :: Int -> [Char] -> [Char]
+          dropN :: Int -> [Char] -> [Char]    -- prem: + dropN type-signature
           dropN 0 = id
           dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
 
@@ -176,8 +176,6 @@ read' xs = case readMaybe xs :: Maybe Int of
 defaultMain :: IO ()
 defaultMain = do
   putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 1"
-  -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
-  -- https://tinyurl.com/2v2fx8d7 (so)
   n :: Int <- read' <$> getLine
   if n >= 1 then printNTimes n
   else error $ "bad input: " <> show n <> ". i need an integer >= 1."
