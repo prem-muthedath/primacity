@@ -154,7 +154,6 @@ user = do
 
 -- | calls `user` `n` times; formats & prints result after each call.
 printNTimes :: Int -> IO ()
-printNTimes 0 = putStrLn "sorry, you do not have any questions."
 printNTimes n = do
   putStrLn $ "thank you. i will now prompt you " <> show n <> " time(s) for data."
   printNTimes' n n
@@ -176,11 +175,11 @@ read' xs = case readMaybe xs :: Maybe Int of
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
 defaultMain :: IO ()
 defaultMain = do
-  putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 0"
+  putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 1"
   -- pattern type signatures require `ScopedTypeVariables`; see /u/ jacob wang @ 
   -- https://tinyurl.com/2v2fx8d7 (so)
   n :: Int <- read' <$> getLine
-  if n >= 0 then printNTimes n
-  else error $ "bad input: " <> show n <> ". i need a number >= 0."
+  if n >= 1 then printNTimes n
+  else error $ "bad input: " <> show n <> ". i need an integer >= 1."
 
 
