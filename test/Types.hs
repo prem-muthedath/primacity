@@ -9,14 +9,14 @@ module Types (
               Message(..)
               ) where
 
-import Common (replace)
+import Common (A, B, K, replace)
 import Inputs (testCasesFile, primacityCountsFile)
 
 -- | some type synonyms to make the code clear.
-type TestCase   = (Int, Int, Int)   -- primacity count test case
-type TestCaseNo = Int               -- primacity count test case number
-type Actual     = Int               -- actual primacity count
-type Expected   = Int               -- expected primacity count
+type TestCase   = (A, B, K)   -- primacity count test case
+type TestCaseNo = Int         -- primacity count test case number
+type Actual     = Int         -- actual primacity count
+type Expected   = Int         -- expected primacity count
 
 -- | data type for parser error messages.
 -- `BadFormat` -> generic constructor for bad line format message.

@@ -78,6 +78,8 @@ module Primacity (
 import Data.List  ( nub )
 import Text.Read (readMaybe)
 
+import Common (A, B, K, oneSpaced, hasNWords)
+
 -- | True if number is a prime.
 isPrime :: Int -> Bool
 isPrime n = isPrime_ n primes
@@ -113,9 +115,9 @@ primacity = length . nub . primeFactors
 -- | given a list of (a, b, k), computes count of integers within each [a..b] 
 -- with primacity `k`, and returns list of all such counts.
 -- author: Prem Muthedath.
-primacityCounts :: [(Int, Int, Int)] -> [Int]
+primacityCounts :: [(A, B, K)] -> [Int]
 primacityCounts = map (\x -> count x)
-  where count :: (Int, Int, Int) -> Int
+  where count :: (A, B, K) -> Int
         count (a, b, k)
             | inRange   = length . filter (== k) . fmap primacity $ [a..b]
             | otherwise = error $ msg
@@ -126,23 +128,21 @@ primacityCounts = map (\x -> count x)
 
 -- | all code from this point on is part of interactive mode. ------------------
 
--- | user feed "a b k" as (a, b, k), a 3-tuple Int.
-userFeed :: String -> (Int, Int, Int)
+-- | user feed "a b k" as a 3-tuple.
+userFeed :: String -> (A, B, K)
 userFeed xs
-    | not3Words = error msg
-    | otherwise = feed . unwords . words $ xs
-    where not3Words :: Bool
-          not3Words = length (words xs) /= 3
-          feed :: String -> (Int, Int, Int)
-          feed ys = let a :: Int = read' . takeWhile (/=' ') . dropN 0 $ ys
-                        b :: Int = read' . takeWhile (/=' ') . dropN 1 $ ys
-                        k :: Int = read' . takeWhile (/=' ') . dropN 2 $ ys
+    | xs `hasNWords` 3 = feed . oneSpaced $ xs
+    | otherwise        = error msg
+    where feed :: String -> (A, B, K)
+          feed ys = let a :: A = read' . takeWhile (/=' ') . dropN 0 $ ys
+                        b :: B = read' . takeWhile (/=' ') . dropN 1 $ ys
+                        k :: K = read' . takeWhile (/=' ') . dropN 2 $ ys
                     in (a, b, k)
-          msg :: String
-          msg = "your input '" <> xs <> "' is not in expected format: a b k"
           dropN :: Int -> [Char] -> [Char]    -- prem: + dropN type-signature
           dropN 0 = id
           dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
+          msg :: String
+          msg = "your input '" <> xs <> "' is not in expected format: a b k"
 
 -- | prompts user for `a b k` & computes primacity count in [a..b] for k.
 user :: IO Int

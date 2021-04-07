@@ -62,7 +62,7 @@ executable primacity
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    other-modules:    Primacity
+    other-modules:    Primacity, Common
 
     -- LANGUAGE extensions used by modules in this package.
     other-extensions: ScopedTypeVariables
@@ -71,7 +71,7 @@ executable primacity
     build-depends:    base ==4.14.1.0, text ==1.2.4.1
 
     -- Directories containing source files.
-    hs-source-dirs:   app
+    hs-source-dirs:   app, common
 
     -- Base language which the package is written in.
     default-language: Haskell2010
@@ -101,7 +101,7 @@ test-suite primacity-test
     build-depends:    base ==4.14.1.0, text ==1.2.4.1
 
     -- Directories containing source files.
-    hs-source-dirs:   test, app
+    hs-source-dirs:   test, app, common
 
     -- Base language which the package is written in.
     default-language: Haskell2010

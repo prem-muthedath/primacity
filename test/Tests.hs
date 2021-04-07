@@ -10,7 +10,7 @@ import Data.List (zipWith4, stripPrefix, find)
 
 import Types
 import Inputs (testCasesFile, primacityCountsFile)
-import Common (hasWordCount, replace, singleSpaced)
+import Common (hasNWords, replace, oneSpaced)
 import Primacity (primacityCounts)
 import Headers (pcHeader)
 
@@ -31,8 +31,8 @@ anExpected line = do
               return $ dropWhile (/=char) str
         pcount :: String -> Maybe String
         pcount xs
-            | xs `hasWordCount` 1 = Just $ singleSpaced xs
-            | otherwise           = Nothing
+            | xs `hasNWords` 1 = Just $ oneSpaced xs
+            | otherwise        = Nothing
 
 -- | parse line & return primacity count test case as a comma-delimited string.
 -- line pattern: `x y z` where `x`, `y`, `z` are +ve integers with any number of 
@@ -43,9 +43,9 @@ testCase line
           | valid     = Just $ format
           | otherwise = Nothing
   where valid :: Bool
-        valid = line `hasWordCount` 3  -- example pattern: "156 287 6"
+        valid = line `hasNWords` 3  -- example pattern: "156 287 6"
         format :: String
-        format = replace ' ' "," . singleSpaced $ line
+        format = replace ' ' "," . oneSpaced $ line
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
