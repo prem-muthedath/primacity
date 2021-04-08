@@ -1,4 +1,4 @@
--- | defines Primacity errors.
+-- | defines user input errors for (mostly) interactive mode in ./Primacity.hs.
 -- author: Prem Muthedath.
 
 module Errors (UserError(..)) where
@@ -6,33 +6,33 @@ module Errors (UserError(..)) where
 import Common (A, B, K)
 
 -- | data type for user input error.
-data UserError = NotIntError String
-                 | Below1Error Int
-                 | FormatError String
-                 | RangeError (A, B, K)
+data UserError = NotIntError String     -- non-integer input error.
+                 | Below1Error Int      -- input value < 1 error.
+                 | FormatError String   -- input format not `a b k` error.
+                 | RangeError (A, B, K) -- invalid A-B-K input value(s) error.
                  deriving Eq
 
 -- | `Show` instance for `UserError`.
 instance Show UserError where
-  show (NotIntError xs)       = notInt xs
-  show (Below1Error n)        = below1 n
-  show (FormatError xs)       = badFormat xs
-  show (RangeError (a, b, k)) = badABK (a, b, k)
+  show (NotIntError xs)       = notIntMsg xs
+  show (Below1Error n)        = below1Msg n
+  show (FormatError xs)       = formatMsg xs
+  show (RangeError (a, b, k)) = rangeMsg (a, b, k)
 
 -- | error message for non-integer input.
-notInt :: String -> String
-notInt xs = "your input '" <> xs <> "' is not an integer."
+notIntMsg :: String -> String
+notIntMsg xs = "your input '" <> xs <> "' is not an integer."
 
 -- | error message for integer input < 1.
-below1 :: Int -> String
-below1 n = "bad input: " <> show n <> ". i need an integer >= 1."
+below1Msg :: Int -> String
+below1Msg n = "bad input: " <> show n <> ". i need an integer >= 1."
 
--- | error message for bad format `a b k` input.
-badFormat :: String -> String
-badFormat xs = "your input '" <> xs <> "' is not in the expected format: a b k"
+-- | error message for bad `a b k` input format.
+formatMsg :: String -> String
+formatMsg xs = "your input '" <> xs <> "' is not in the expected format: a b k"
 
--- | error message for bad A-B-K value.
-badABK :: (A, B, K) -> String
-badABK (a, b, k) = "bad (a,b,k): " <> show (a,b,k) <> ". i need 2 <= a <= b, k >= 1."
+-- | error message for bad A-B-K value(s).
+rangeMsg :: (A, B, K) -> String
+rangeMsg (a, b, k) = "bad (a,b,k): " <> show (a,b,k) <> ". i need 2 <= a <= b, k >= 1."
 
 
