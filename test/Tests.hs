@@ -10,7 +10,7 @@ import Data.List (zipWith4, stripPrefix, find)
 
 import Types
 import Inputs (testCasesFile, primacityCountsFile)
-import Common (hasNWords, replace, oneSpaced)
+import Common (hasNWords, replace, oneSpaced, error')
 import Primacity (primacityCounts)
 import Headers (pcHeader)
 
@@ -53,7 +53,7 @@ parseLine _ []          = []   -- ignore blank
 parseLine _ ('-':'-':_) = []   -- ignore comment
 parseLine f line = case (f line) of
                       Just x  -> x
-                      Nothing -> error . show $ BadFormat line
+                      Nothing -> error' $ LineFormatError line
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
@@ -82,7 +82,7 @@ expected = do
   return $ map (\x ->
     case readMaybe x :: Maybe Expected of
       Just y  -> y
-      Nothing -> error . show $ BadPC x
+      Nothing -> error' $ PCError x
     ) pLines
 
 -- | primacity count test cases, each of type `TestCase`.
@@ -93,7 +93,7 @@ testCases = do
   return $ map (\x ->
     case readMaybe $ "(" ++ x ++ ")" :: Maybe TestCase of
       Just y  -> y
-      Nothing -> error . show $ BadTC x
+      Nothing -> error' $ TCError x
     ) pLines
 
 -- | run primacity count tests.

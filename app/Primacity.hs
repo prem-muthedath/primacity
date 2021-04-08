@@ -78,7 +78,8 @@ module Primacity (
 import Data.List  ( nub )
 import Text.Read (readMaybe)
 
-import Common (A, B, K, oneSpaced, hasNWords)
+import Common (A, B, K, oneSpaced, hasNWords, error')
+import Errors
 
 -- | True if number is a prime.
 isPrime :: Int -> Bool
@@ -120,11 +121,9 @@ primacityCounts = map (\x -> count x)
   where count :: (A, B, K) -> Int
         count (a, b, k)
             | inRange   = length . filter (== k) . fmap primacity $ [a..b]
-            | otherwise = error $ msg
+            | otherwise = error' $ RangeError (a, b, k)
             where inRange :: Bool
                   inRange = and [(2 <= a), (a <= b), (k >= 1)]
-                  msg :: String
-                  msg = "bad (a,b,k): " <> show (a,b,k) <> ". i need 2 <= a <= b, k >= 1."
 
 -- | all code from this point on is part of interactive mode. ------------------
 
@@ -132,7 +131,7 @@ primacityCounts = map (\x -> count x)
 userFeed :: String -> (A, B, K)
 userFeed xs
     | xs `hasNWords` 3 = feed . oneSpaced $ xs
-    | otherwise        = error msg
+    | otherwise        = error' $ FormatError xs
     where feed :: String -> (A, B, K)
           feed ys = let a :: A = read' . takeWhile (/=' ') . dropN 0 $ ys
                         b :: B = read' . takeWhile (/=' ') . dropN 1 $ ys
@@ -141,8 +140,6 @@ userFeed xs
           dropN :: Int -> [Char] -> [Char]    -- prem: + dropN type-signature
           dropN 0 = id
           dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
-          msg :: String
-          msg = "your input '" <> xs <> "' is not in expected format: a b k"
 
 -- | prompts user for `a b k` & computes primacity count in [a..b] for k.
 user :: IO Int
@@ -169,15 +166,15 @@ printNTimes n = do
 read' :: String -> Int
 read' xs = case readMaybe xs :: Maybe Int of
             Just x    -> x
-            Nothing   -> error $ "your input '" <> xs <> "' is not an integer."
+            Nothing   -> error' $ NotIntError xs
 
 -- | start of interactive mode.
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
 defaultMain :: IO ()
 defaultMain = do
-  putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 1"
+  putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 1."
   n :: Int <- read' <$> getLine
   if n >= 1 then printNTimes n
-  else error $ "bad input: " <> show n <> ". i need an integer >= 1."
+  else error' $ Below1Error n
 
 

@@ -24,4 +24,7 @@ oneSpaced = unwords . words
 hasNWords :: String -> Int -> Bool
 hasNWords str n = length (words str) == n
 
+-- | composite of `error` & `show`.
+error' :: (Show a) => a -> c
+error' = error . show
 

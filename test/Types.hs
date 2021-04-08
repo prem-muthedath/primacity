@@ -6,7 +6,7 @@ module Types (
               TestCaseNo,
               Actual,
               Expected,
-              Message(..)
+              FileParseError(..)
               ) where
 
 import Common (A, B, K, replace)
@@ -18,21 +18,23 @@ type TestCaseNo = Int         -- primacity count test case number
 type Actual     = Int         -- actual primacity count
 type Expected   = Int         -- expected primacity count
 
--- | data type for parser error messages.
--- `BadFormat` -> generic constructor for bad line format message.
--- `BadPC`     -> constructor for non-integer primacity count message.
--- `BadTC`     -> constructor for non-integer(s) test case message.
-data Message = BadFormat String | BadPC String | BadTC String
+-- | data type for file parse error.
+-- `LineFormatError` -> generic constructor for line format error.
+-- `PCError`         -> constructor for non-integer primacity count error.
+-- `TCError`         -> constructor for non-integer(s) test case error.
+data FileParseError = LineFormatError String
+                      | PCError String
+                      | TCError String
 
--- | `Show` instance for `Message`.
-instance Show Message where
-  show (BadFormat xs) = msgBF xs
-  show (BadPC xs)     = msgPC xs
-  show (BadTC xs)     = msgTC xs
+-- | `Show` instance for `FileParseError`.
+instance Show FileParseError where
+  show (LineFormatError xs) = msgLF xs
+  show (PCError xs)         = msgPC xs
+  show (TCError xs)         = msgTC xs
 
--- | message for `BadFormat`.
-msgBF :: String -> String
-msgBF line = "file parse failed at line:"
+-- | message for `LineFormatError`.
+msgLF :: String -> String
+msgLF line = "file parse failed at line:"
   ++ "\n"
   ++ line
   ++ "\n"
@@ -42,7 +44,7 @@ msgBF line = "file parse failed at line:"
   ++ primacityCountsFile
   ++ "' files for the failed line as well as for data-pattern specification."
 
--- | message for `BadPC`.
+-- | message for `PCError`.
 msgPC :: String -> String
 msgPC line = "'"
   ++ primacityCountsFile
@@ -52,7 +54,7 @@ msgPC line = "'"
   ++ "\n"
   ++ "reason: non-integer primacity count found."
 
--- | message for `BadTC`.
+-- | message for `TCError`.
 msgTC :: String -> String
 msgTC line = "'"
   ++ testCasesFile
