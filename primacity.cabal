@@ -62,7 +62,7 @@ executable primacity
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    other-modules:    Primacity, Errors, Common
+    other-modules:    Primacity, UserErrors, Common
 
     -- LANGUAGE extensions used by modules in this package.
     other-extensions: ScopedTypeVariables
@@ -93,7 +93,7 @@ test-suite primacity-test
                       Common,
                       Inputs,
                       Primacity,
-                      Errors
+                      UserErrors
 
     -- LANGUAGE extensions used by modules in this package.
     other-extensions: ScopedTypeVariables

@@ -78,8 +78,8 @@ module Primacity (
 import Data.List  ( nub )
 import Text.Read (readMaybe)
 
-import Common (A, B, K, oneSpaced, hasNWords, error')
-import Errors
+import Common (A, B, K, oneSpaced, hasNWords, showE)
+import UserErrors
 
 -- | True if number is a prime.
 isPrime :: Int -> Bool
@@ -116,38 +116,48 @@ primacity = length . nub . primeFactors
 -- | given a list of (a, b, k), computes count of integers within each [a..b] 
 -- with primacity `k`, and returns list of all such counts.
 -- author: Prem Muthedath.
-primacityCounts :: [(A, B, K)] -> [Int]
+primacityCounts :: [(A, B, K)] -> [Either UserError Int]
 primacityCounts = map (\x -> count x)
-  where count :: (A, B, K) -> Int
+  where count :: (A, B, K) -> Either UserError Int
         count (a, b, k)
-            | inRange   = length . filter (== k) . fmap primacity $ [a..b]
-            | otherwise = error' $ RangeError (a, b, k)
+            | inRange   = Right $ length . filter (== k) . fmap primacity $ [a..b]
+            | otherwise = Left $ ABKRangeError (a, b, k)
             where inRange :: Bool
                   inRange = and [(2 <= a), (a <= b), (k >= 1)]
 
 -- | all code from this point on is part of interactive mode. ------------------
 
 -- | user feed "a b k" as a 3-tuple.
-userFeed :: String -> (A, B, K)
-userFeed xs
-    | xs `hasNWords` 3 = feed . oneSpaced $ xs
-    | otherwise        = error' $ FormatError xs
-    where feed :: String -> (A, B, K)
-          feed ys = let a :: A = read' . takeWhile (/=' ') . dropN 0 $ ys
-                        b :: B = read' . takeWhile (/=' ') . dropN 1 $ ys
-                        k :: K = read' . takeWhile (/=' ') . dropN 2 $ ys
-                    in (a, b, k)
-          dropN :: Int -> [Char] -> [Char]    -- prem: + dropN type-signature
-          dropN 0 = id
-          dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
+userFeed :: String -> Either UserError (A, B, K)
+userFeed xs = do
+  ys :: String    <- format
+  zs :: (A, B, K) <- feed ys
+  return zs
+  where format :: Either UserError String
+        format | xs `hasNWords` 3 = Right $ oneSpaced xs
+               | otherwise        = Left $ FormatError xs
+        feed :: String -> Either UserError (A, B, K)
+        feed ys = do
+          a :: A <- read' . takeWhile (/=' ') . dropN 0 $ ys
+          b :: B <- read' . takeWhile (/=' ') . dropN 1 $ ys
+          k :: K <- read' . takeWhile (/=' ') . dropN 2 $ ys
+          return (a, b, k)
+        dropN :: Int -> [Char] -> [Char]    -- prem: + dropN type-signature
+        dropN 0 = id
+        dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
 
 -- | prompts user for `a b k` & computes primacity count in [a..b] for k.
-user :: IO Int
+-- see /u/ hammar @ https://tinyurl.com/k4fkyykk for IO-Maybe mix using <$>.
+user :: IO (Either UserError Int)
 user = do
   putStrLn "please enter integers a, b, k, where 2 <= a <= b and k >= 1, in the format: a b k"
-  xs <- getLine
-  let n = head $ primacityCounts [userFeed xs]
+  n :: Either UserError Int <- pcount <$> getLine
   pure n
+  where pcount :: String -> Either UserError Int
+        pcount ys = do
+          ufeed :: (A, B, K) <- userFeed ys
+          n :: Int <- head $ primacityCounts [ufeed]
+          return n
 
 -- | calls `user` `n` times; formats & prints result after each call.
 printNTimes :: Int -> IO ()
@@ -156,25 +166,29 @@ printNTimes n = do
   printNTimes' n n
   where printNTimes' :: Int -> Int -> IO ()
         printNTimes' 0 _     = pure ()
-        printNTimes' m total = do
-          ans <- user
-          putStr $ "Case #" <> show (total - m + 1) <> ": "
-          putStrLn $ show ans
-          printNTimes' (pred m) total
+        printNTimes' m total =
+          do ans :: Either UserError Int <- user
+             putStr $ "Case #" <> show (total - m + 1) <> ": "
+             putStrLn $ showE ans
+             printNTimes' (pred m) total
 
--- | reads string as Int; errors on bad conversion.
-read' :: String -> Int
+-- | reads string as Int.
+read' :: String -> Either UserError Int
 read' xs = case readMaybe xs :: Maybe Int of
-            Just x    -> x
-            Nothing   -> error' $ NotIntError xs
+            Just x    -> Right x
+            Nothing   -> Left $ NotIntError xs
 
 -- | start of interactive mode.
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
+-- see /u/ hammar @ https://tinyurl.com/k4fkyykk for IO-Maybe mix using <$>.
 defaultMain :: IO ()
 defaultMain = do
   putStrLn "hi, how many 'questions' do you have?  please enter an integer >= 1."
-  n :: Int <- read' <$> getLine
-  if n >= 1 then printNTimes n
-  else error' $ Below1Error n
-
+  n :: Either UserError Int <- read' <$> getLine
+  either f g n
+  where f :: UserError -> IO ()
+        f a = putStrLn . show $ a
+        g :: Int -> IO ()
+        g b | b >= 1    = printNTimes b
+            | otherwise = putStrLn . show $ Below1Error b
 

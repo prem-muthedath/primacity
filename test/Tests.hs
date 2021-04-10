@@ -10,7 +10,7 @@ import Data.List (zipWith4, stripPrefix, find)
 
 import Types
 import Inputs (testCasesFile, primacityCountsFile)
-import Common (hasNWords, replace, oneSpaced, error')
+import Common (hasNWords, replace, oneSpaced, error', showE)
 import Primacity (primacityCounts)
 import Headers (pcHeader)
 
@@ -67,12 +67,13 @@ parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
 printResults :: [(TestCaseNo, TestCase, Actual, Expected)] -> IO ()
 printResults vals = do
   pcHeader
-  mapM_(\(n, x, y, z) -> putStrLn $
-      "Test case #" ++  show n ++ ": " ++
-      show x ++ " | "  ++
-      show y ++ " | "  ++
-      show z ++ " | "  ++
-      if (y==z) then "PASS" else "FAIL") vals
+  mapM_(\(n, x, y, z) ->
+      let (x', y', z') = (show x, showE y, show z)
+      in putStrLn $ "Test case #" ++  show n ++ ": " ++
+        x' ++ " | "  ++
+        y' ++ " | "  ++
+        z' ++ " | "  ++
+        if (y' == z') then "PASS" else "FAIL") vals
 
 -- | expected primacity counts.
 expected :: IO [Expected]

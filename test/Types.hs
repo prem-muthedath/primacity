@@ -10,13 +10,14 @@ module Types (
               ) where
 
 import Common (A, B, K, replace)
+import UserErrors (UserError)
 import Inputs (testCasesFile, primacityCountsFile)
 
 -- | some type synonyms to make the code clear.
-type TestCase   = (A, B, K)   -- primacity count test case
-type TestCaseNo = Int         -- primacity count test case number
-type Actual     = Int         -- actual primacity count
-type Expected   = Int         -- expected primacity count
+type TestCase   = (A, B, K)                 -- primacity count test case
+type TestCaseNo = Int                       -- primacity count test case number
+type Actual     = Either UserError Int      -- actual primacity count
+type Expected   = Int                       -- expected primacity count
 
 -- | data type for file parse error.
 -- `LineFormatError` -> generic constructor for line format error.
