@@ -3,7 +3,7 @@ Siddanathan's primacity algorithm (based on facebook hackathon).
 
 Source: https://goo.gl/Yv4XMh (stackoverflow)
 
-Prem Muthedath: author of all test code, cabal packaging, and docs.
+Prem Muthedath: author of all test code, error handling, cabal packaging, docs.
 
 Basically, given 3 positive integers -- A, B, K -- output number of integers in 
 [A, B] with primacity K.  For example, if A=5, B=15, K=2, the program will 
