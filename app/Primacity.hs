@@ -187,7 +187,7 @@ defaultMain = do
   n :: Either UserError Int <- read' <$> getLine
   either f g n
   where f :: UserError -> IO ()
-        f a = putStrLn . show $ a
+        f = putStrLn . show
         g :: Int -> IO ()
         g b | b >= 1    = printNTimes b
             | otherwise = putStrLn . show $ Below1Error b
