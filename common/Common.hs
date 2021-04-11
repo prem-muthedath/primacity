@@ -1,5 +1,5 @@
 -- | Common types & functions used by both app & test modules.
--- author: Prem Muthedath
+-- author: Prem Muthedath.
 
 module Common where
 

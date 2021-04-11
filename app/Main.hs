@@ -1,5 +1,5 @@
 -- | App's Main module.
--- author: Prem Muthedath
+-- author: Prem Muthedath.
 
 module Main (main) where
 

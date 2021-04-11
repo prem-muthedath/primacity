@@ -1,5 +1,5 @@
 -- | Main module for tests.
--- author: Prem Muthedath
+-- author: Prem Muthedath.
 
 module Main (main) where
 

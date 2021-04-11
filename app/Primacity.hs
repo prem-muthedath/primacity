@@ -2,7 +2,7 @@
 
 -- | Primacity module -- contains all code for primacity calculations.
 -- author : /u/ Siddhanathan @ https://counto.gl/Yv4XMh (stackoverflow).
--- Prem Muthedath: performance fix, error checks, doc, cabal packaging.
+-- Prem Muthedath: performance fix, error handling, doc, cabal packaging.
 
 -- this code solves (fast) the primacity problem in facebook hackathon 2015. for 
 -- details, see ~/software-development/notes/facebook-hackathon-2015.pages
@@ -138,10 +138,10 @@ userFeed xs = do
                | otherwise        = Left $ FormatError xs
         feed :: String -> Either UserError (A, B, K)
         feed ys = do
-          a :: A <- read' . takeWhile (/=' ') . dropN 0 $ ys
-          b :: B <- read' . takeWhile (/=' ') . dropN 1 $ ys
-          k :: K <- read' . takeWhile (/=' ') . dropN 2 $ ys
-          return (a, b, k)
+            a :: A <- read' . takeWhile (/=' ') . dropN 0 $ ys
+            b :: B <- read' . takeWhile (/=' ') . dropN 1 $ ys
+            k :: K <- read' . takeWhile (/=' ') . dropN 2 $ ys
+            return (a, b, k)
         dropN :: Int -> [Char] -> [Char]    -- prem: + dropN type-signature
         dropN 0 = id
         dropN n = dropN (pred n) . drop 1 . dropWhile (/= ' ')
@@ -155,9 +155,9 @@ user = do
   pure n
   where pcount :: String -> Either UserError Int
         pcount ys = do
-          ufeed :: (A, B, K) <- userFeed ys
-          n :: Int <- head $ primacityCounts [ufeed]
-          return n
+            ufeed :: (A, B, K) <- userFeed ys
+            n :: Int <- head $ primacityCounts [ufeed]
+            return n
 
 -- | calls `user` `n` times; formats & prints result after each call.
 printNTimes :: Int -> IO ()
@@ -173,10 +173,11 @@ printNTimes n = do
              printNTimes' (pred m) total
 
 -- | reads string as Int.
+-- author: Prem Muthedath.
 read' :: String -> Either UserError Int
 read' xs = case readMaybe xs :: Maybe Int of
-            Just x    -> Right x
-            Nothing   -> Left $ NotIntError xs
+              Just x    -> Right x
+              Nothing   -> Left $ NotIntError xs
 
 -- | start of interactive mode.
 -- prompts user for `no of inputs` and initiates rest of execution sequence.

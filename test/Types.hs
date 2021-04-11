@@ -1,5 +1,5 @@
 -- | Types for tests.
--- author: Prem Muthedath
+-- author: Prem Muthedath.
 
 module Types (
               TestCase,
