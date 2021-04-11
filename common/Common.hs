@@ -30,6 +30,6 @@ error' = error . show
 
 -- | shows value of `Either` type.
 showE :: (Show a, Show b) => Either a b -> String
-showE x = either show show x
+showE = either show show
 
 
