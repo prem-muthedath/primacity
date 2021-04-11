@@ -49,8 +49,8 @@ parseLine :: (String -> Maybe String) -> String -> String
 parseLine _ []          = []   -- ignore blank
 parseLine _ ('-':'-':_) = []   -- ignore comment
 parseLine f line = case (f line) of
-                      Just x  -> x
-                      Nothing -> error' $ LineFormatError line
+                        Just x  -> x
+                        Nothing -> error' $ LineFormatError line
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
@@ -67,8 +67,8 @@ expected = do
   let pLines = parse contents anExpected
   return $ map (\x ->
     case readMaybe x :: Maybe K of
-      Just y  -> Right y
-      Nothing -> error' $ PCError x
+         Just y  -> Right y
+         Nothing -> error' $ PCError x
     ) pLines
 
 -- | primacity count test cases, each of type `TestCase`.
@@ -78,8 +78,8 @@ testCases = do
   let pLines = parse contents testCase
   return $ map (\x ->
     case readMaybe $ "(" ++ x ++ ")" :: Maybe TestCase of
-      Just y  -> y
-      Nothing -> error' $ TCError x
+         Just y  -> y
+         Nothing -> error' $ TCError x
     ) pLines
 
 

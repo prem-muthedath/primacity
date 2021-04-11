@@ -176,8 +176,8 @@ printNTimes n = do
 -- author: Prem Muthedath.
 read' :: String -> Either UserError Int
 read' xs = case readMaybe xs :: Maybe Int of
-              Just x    -> Right x
-              Nothing   -> Left $ NotIntError xs
+                Just x    -> Right x
+                Nothing   -> Left $ NotIntError xs
 
 -- | start of interactive mode.
 -- prompts user for `no of inputs` and initiates rest of execution sequence.
