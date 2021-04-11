@@ -54,7 +54,7 @@
 --       computations, including all recursive calls as well as calls made 
 --       within `map` in `primacityCounts` (see ghci debug output, 
 --       primacity/performance/cached-primes.lhs). this solves the module-
---       dependency issue. for example, above test case now runs in ~ 10 secs 
+--       dependency issue. for example, above test case now runs in ~ 18 secs 
 --       whether or not `primacityCounts.count` is called from this module.
 --
 --       /u/ ski @ #haskell diagonized this problem and recommended solutions.
