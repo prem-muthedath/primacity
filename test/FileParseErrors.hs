@@ -1,5 +1,5 @@
 -- | Defines parse errors of test case & expected primacity counts files.
--- author: Prem Muthedath
+-- author: Prem Muthedath.
 
 module FileParseErrors (FileParseError(..)) where
 
@@ -13,6 +13,7 @@ import Inputs (testCasesFile, primacityCountsFile)
 data FileParseError = LineFormatError String
                       | PCError String
                       | TCError String
+                      deriving Eq
 
 -- | `Show` instance for `FileParseError`.
 instance Show FileParseError where

@@ -1,12 +1,12 @@
 -- | Input data (files, etc.) for tests.
--- author: Prem Muthedath
+-- author: Prem Muthedath.
 
 module Inputs where
 
 import UserErrors (UserError(ABKRangeError))
 import Types (TestCase, Expected)
 
--- | primacity count test cases file.
+-- | primacity count test cases input file.
 testCasesFile :: String
 testCasesFile =  "./test/primacity-count-test-cases.txt"
 
