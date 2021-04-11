@@ -92,7 +92,7 @@ test-suite primacity-test
                       FileParseErrors,
                       Parser,
                       Inputs,
-                      Headers,
+                      Print,
                       Common,
                       Primacity,
                       UserErrors

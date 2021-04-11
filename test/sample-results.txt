@@ -2,9 +2,9 @@
 -- this is a frozen sample, but all test runs should give same results.
 -- lines that begin with `--`, such as this one, are comments.
 -- all non-comment lines together represent the test results.
-#######################################################################################
+#################################################################################################
 PRIMACITY COUNT TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL
-#######################################################################################
+#################################################################################################
 Test case #1: (5,15,2) | 5 | 5 | PASS
 Test case #2: (2,10,1) | 7 | 7 | PASS
 Test case #3: (24,42,3) | 2 | 2 | PASS
@@ -105,3 +105,15 @@ Test case #97: (847145,6488989,4) | 1346130 | 1346130 | PASS
 Test case #98: (115606,3742378,3) | 1344370 | 1344370 | PASS
 Test case #99: (6055091,6351638,1) | 18994 | 18994 | PASS
 Test case #100: (5154586,9431441,4) | 1054292 | 1054292 | PASS
+#################################################################################################
+PRIMACITY COUNT EXCEPTION TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL
+#################################################################################################
+Test case #1: (5,15,2) | 5 | 5 | PASS
+Test case #2: (15,5,2) | bad (a,b,k): (15,5,2). required: 2 <= a <= b, k >= 1. | bad (a,b,k): (15,5,2). required: 2 <= a <= b, k >= 1. | PASS
+Test case #3: (31,42,1) | 4 | 4 | PASS
+Test case #4: (1,15,1) | bad (a,b,k): (1,15,1). required: 2 <= a <= b, k >= 1. | bad (a,b,k): (1,15,1). required: 2 <= a <= b, k >= 1. | PASS
+Test case #5: (2,15,0) | bad (a,b,k): (2,15,0). required: 2 <= a <= b, k >= 1. | bad (a,b,k): (2,15,0). required: 2 <= a <= b, k >= 1. | PASS
+Test case #6: (100,121,1) | 6 | 6 | PASS
+Test case #7: (12,-4,-5) | bad (a,b,k): (12,-4,-5). required: 2 <= a <= b, k >= 1. | bad (a,b,k): (12,-4,-5). required: 2 <= a <= b, k >= 1. | PASS
+Test case #8: (-1,15,1) | bad (a,b,k): (-1,15,1). required: 2 <= a <= b, k >= 1. | bad (a,b,k): (-1,15,1). required: 2 <= a <= b, k >= 1. | PASS
+Test case #9: (90,140,1) | 13 | 13 | PASS
