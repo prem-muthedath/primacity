@@ -1,19 +1,19 @@
 -- | Test results headers.
 -- author: Prem Muthedath
 
-module Headers (pcHeader, qcHeader) where
+module Headers (pcHeader, pcExceptionHeader) where
 
 -- | primacity count test results caption.
 pcCaption :: String
 pcCaption = "PRIMACITY COUNT TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL"
 
--- | QuickCheck test results caption.
-qcCaption :: String
-qcCaption = "QuickCheck Test Results"
+-- | Primacity count error test results caption.
+pcExceptionCaption :: String
+pcExceptionCaption = "PRIMACITY COUNT EXCEPTION TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL"
 
 -- | max caption size.
 maxSize :: Int
-maxSize = max (length pcCaption) (length qcCaption)
+maxSize = max (length pcCaption) (length pcExceptionCaption)
 
 -- | seperator for header.
 seperator :: String
@@ -29,7 +29,7 @@ pcHeader :: IO ()
 pcHeader = header pcCaption
 
 -- | QuickCheck test results header.
-qcHeader :: IO ()
-qcHeader = header qcCaption
+pcExceptionHeader :: IO ()
+pcExceptionHeader = header pcExceptionCaption
 
 
