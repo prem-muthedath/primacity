@@ -11,11 +11,11 @@ import Common (showE)
 -- | `Test` instance caption.
 caption :: Test -> String
 caption test = show test ++ " RESULTS -- Test case" ++ middle ++ end
-    where middle :: String
-          middle | Empty <- test = ": [(a, b, k)]"
-                 | otherwise     = " # : (a, b, k)"
-          end :: String
-          end = " | actual | expected | PASS/FAIL"
+  where middle :: String
+        middle | Empty <- test = ": [(a, b, k)]"
+               | otherwise     = " # : (a, b, k)"
+        end :: String
+        end = " | actual | expected | PASS/FAIL"
 
 -- | `Test` instance header.
 header :: Test -> String
