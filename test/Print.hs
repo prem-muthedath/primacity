@@ -36,19 +36,21 @@ printResults test xs ys zs = do
             let ps      = [show xs, show ys, show zs]
                 status  = (ys == zs)
             putStr $ "Test case : "
-            print' ps status
+            printResult ps status
         printNonEmpty :: IO ()
         printNonEmpty = mapM_(\(n, x, y, z) ->
             do let ps     = [show x, showE y, showE z]
                    status = (y == z)
                putStr $ "Test case #" ++  show n ++ ": "
-               print' ps status) results
+               printResult ps status) results
         results :: [(TestCaseNo, TestCase, Actual, Expected)]
         results = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
-        print' :: [String] -> Bool -> IO ()
-        print' ps status = do
-            let flag = if status then "PASS" else "FAIL"
-            mapM_ (\x -> putStr $ x ++ " | ") ps
-            putStrLn flag
+
+-- | prints a test case result.
+printResult :: [String] -> Bool -> IO ()
+printResult result status = do
+    let outcome = if status then "PASS" else "FAIL"
+    mapM_ (\x -> putStr $ x ++ " | ") result    -- prints each item immediately!
+    putStrLn outcome
 
 
