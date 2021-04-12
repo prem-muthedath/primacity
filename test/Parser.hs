@@ -1,4 +1,5 @@
--- | Parses test input files (i.e., test cases & expected counts).
+-- | Parses "normal" test input files for test cases & expected counts.
+-- These input files contain good data -- not exception & empty test cases.
 -- author: Prem Muthedath.
 
 module Parser (testCases, expected) where

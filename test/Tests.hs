@@ -5,36 +5,49 @@
 
 module Tests (run) where
 
-import Data.List (zipWith4)
-
 import Types
 import Parser (testCases, expected)
 import Inputs (exceptionTestCases, exceptionExpected)
 import Primacity (primacityCounts)
-import Print (Header(..), printResults)
+import Print (printResults)
 
-results :: [TestCase] -> [Actual] -> [Expected] -> [(TestCaseNo, TestCase, Actual, Expected)]
-results = zipWith4 (\n x y z -> (n, x, y, z)) [1..]
-
--- | run exception tests (to check error handling).
-exceptionTests :: IO ()
-exceptionTests = do
+-- | run primacity count test for inputs that generate exception.
+-- this test checks error handling.
+exceptionTest :: IO ()
+exceptionTest = do
   let xs :: [TestCase] = exceptionTestCases
       zs :: [Expected] = exceptionExpected
       ys :: [Actual]   = primacityCounts xs
-  printResults Exception $ results xs ys zs
+  printResults Exception xs ys zs
 
--- | run primacity count tests.
-primacityCountTests :: IO ()
-primacityCountTests = do
+-- | run primacity count test for empty input.
+emptyTest :: IO ()
+emptyTest = do
+  let xs :: [TestCase] = []
+      zs :: [Expected] = []
+      ys :: [Actual]   = primacityCounts xs
+  printResults Empty xs ys zs
+
+-- | run primacity count test for "normal" (i.e., good) inputs.
+normalTest :: IO ()
+normalTest = do
   xs :: [TestCase] <- testCases
   zs :: [Expected] <- expected
   let ys :: [Actual] = primacityCounts xs
-  printResults Normal $ results xs ys zs
+  printResults Normal xs ys zs
+
+-- | maps an instance of `Test` to its corresponding test.
+test :: Test -> IO ()
+test Normal    = normalTest
+test Empty     = emptyTest
+test Exception = exceptionTest
 
 -- | run all tests.
+-- NOTE: if you want to run just non-Normal tests, comment out current 
+-- statements within the `do` block and put this code instead:
+-- mapM_(\x -> if x /= Normal then test x else putStrLn $ show x) [Normal ..]
 run :: IO ()
 run = do
-  primacityCountTests
-  exceptionTests
+  let allTests = map (\x -> test x) [Normal ..]
+  mapM_(\x -> x) allTests
 

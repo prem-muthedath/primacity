@@ -1,48 +1,65 @@
 -- | Test results headers.
 -- author: Prem Muthedath.
 
-module Print (Header(..), printResults) where
+module Print (printResults) where
+
+import Data.List (zipWith4, sort)
 
 import Types
 import Common (showE)
 
--- | max caption size.
-maxSize :: Int
-maxSize = max (length normal) (length exception)
+-- | `Test` instance caption.
+caption :: Test -> String
+caption test | Empty <- test  = start ++ rest eMiddle
+             | otherwise      = start ++ rest middle
+             where start :: String
+                   start = show test
+                   rest :: String -> String
+                   rest str = " RESULTS -- Test case" ++ str ++ end
+                   eMiddle :: String
+                   eMiddle = ": [(a, b, k)]"
+                   middle :: String
+                   middle = " # : (a, b, k)"
+                   end :: String
+                   end = " | actual | expected | PASS/FAIL"
 
--- | seperator for header format.
-seperator :: String
-seperator = replicate (maxSize) '#'
+-- | `Test` instance header.
+header :: Test -> String
+header test = concat [seperator, "\n", caption test, "\n", seperator]
+  where seperator :: String
+        seperator = replicate (maxSize) '#'
+        maxSize :: Int
+        maxSize = last . sort $ captionSizes
+        captionSizes :: [Int]
+        captionSizes = map (\x -> length . caption $ x) [Normal ..]
 
--- | given a caption, formats it.
-format :: String -> String
-format caption = concat [seperator, "\n", caption, "\n", seperator]
+-- | format & print test results.
+printResults :: Test -> [TestCase] -> [Actual] -> [Expected] -> IO ()
+printResults test xs ys zs
+    | Empty <- test = printEmpty
+    | otherwise     = printNonEmpty
+    where printEmpty :: IO ()
+          printEmpty= do
+            putStrLn $ header Empty
+            let (x', y', z') = (show xs, show ys, show zs)
+                status       = (ys == zs)
+            putStr $ "Test case : "
+            print' x' y' z' status
+          printNonEmpty :: IO ()
+          printNonEmpty = do
+            putStrLn $ header test
+            mapM_(\(n, x, y, z) ->
+                do let (x', y', z') = (show x, showE y, showE z)
+                       status       = (y == z)
+                   putStr $ "Test case #" ++  show n ++ ": "
+                   print' x' y' z' status) results
+          results :: [(TestCaseNo, TestCase, Actual, Expected)]
+          results = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
+          print' :: String -> String -> String -> Bool -> IO ()
+          print' x y z status = putStrLn $
+              x ++ " | "  ++
+              y ++ " | "  ++
+              z ++ " | "  ++
+              if status then "PASS" else "FAIL"
 
--- | Normal primacity count test results caption.
-normal :: String
-normal = "PRIMACITY COUNT TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL"
-
--- | Primacity count exception test results caption.
-exception :: String
-exception = "PRIMACITY COUNT EXCEPTION TEST RESULTS -- Test case # : (a, b, k) | actual | expected | PASS/FAIL"
-
--- | represents available headings for print.
-data Header = Normal | Exception deriving Eq
-
--- `Show` instance for `Header`.
-instance Show Header where
-  show Normal    = format normal
-  show Exception = format exception
-
--- | format & print primacity count test results.
-printResults :: Header -> [(TestCaseNo, TestCase, Actual, Expected)] -> IO ()
-printResults header vals = do
-  putStrLn . show $ header
-  mapM_(\(n, x, y, z) ->
-      let (x', y', z') = (show x, showE y, showE z)
-      in putStrLn $ "Test case #" ++  show n ++ ": " ++
-        x' ++ " | "  ++
-        y' ++ " | "  ++
-        z' ++ " | "  ++
-        if (y == z) then "PASS" else "FAIL") vals
 
