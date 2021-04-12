@@ -33,23 +33,21 @@ printResults test xs ys zs = do
     if test == Empty then printEmpty else printNonEmpty
   where printEmpty :: IO ()
         printEmpty = do
-            let (x', y', z') = (show xs, show ys, show zs)
-                status       = (ys == zs)
+            let ps      = [show xs, show ys, show zs]
+                status  = (ys == zs)
             putStr $ "Test case : "
-            print' x' y' z' status
+            print' ps status
         printNonEmpty :: IO ()
         printNonEmpty = mapM_(\(n, x, y, z) ->
-            do let (x', y', z') = (show x, showE y, showE z)
-                   status       = (y == z)
+            do let ps     = [show x, showE y, showE z]
+                   status = (y == z)
                putStr $ "Test case #" ++  show n ++ ": "
-               print' x' y' z' status) results
+               print' ps status) results
         results :: [(TestCaseNo, TestCase, Actual, Expected)]
         results = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
-        print' :: String -> String -> String -> Bool -> IO ()
-        print' x y z status = putStrLn $
-            x ++ " | "  ++
-            y ++ " | "  ++
-            z ++ " | "  ++
-            if status then "PASS" else "FAIL"
+        print' :: [String] -> Bool -> IO ()
+        print' ps status = do
+            let flag = if status then "PASS" else "FAIL"
+            putStrLn $ concatMap (\x -> x ++ " | ") ps ++ flag
 
 
