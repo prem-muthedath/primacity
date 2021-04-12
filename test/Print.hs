@@ -48,6 +48,7 @@ printResults test xs ys zs = do
         print' :: [String] -> Bool -> IO ()
         print' ps status = do
             let flag = if status then "PASS" else "FAIL"
-            putStrLn $ concatMap (\x -> x ++ " | ") ps ++ flag
+            mapM_ (\x -> putStr $ x ++ " | ") ps
+            putStrLn flag
 
 
