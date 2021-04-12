@@ -1,9 +1,10 @@
--- | Test results headers.
+-- | Prints test results.
 -- author: Prem Muthedath.
 
 module Print (printResults) where
 
 import Data.List (zipWith4, sort)
+
 import Types
 import Common (showE)
 
@@ -26,6 +27,13 @@ header test = concat [seperator, "\n", caption test, "\n", seperator]
         captionSizes :: [Int]
         captionSizes = map (\x -> length . caption $ x) [Normal ..]
 
+-- | prints a test case result.
+printResult :: [String] -> Bool -> IO ()
+printResult result status = do
+    let outcome = if status then "PASS" else "FAIL"
+    mapM_ (\x -> putStr $ x ++ " | ") result    -- prints each item immediately!
+    putStrLn outcome
+
 -- | format & print test results.
 printResults :: Test -> [TestCase] -> [Actual] -> [Expected] -> IO ()
 printResults test xs ys zs = do
@@ -45,12 +53,5 @@ printResults test xs ys zs = do
                printResult ps status) results
         results :: [(TestCaseNo, TestCase, Actual, Expected)]
         results = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
-
--- | prints a test case result.
-printResult :: [String] -> Bool -> IO ()
-printResult result status = do
-    let outcome = if status then "PASS" else "FAIL"
-    mapM_ (\x -> putStr $ x ++ " | ") result    -- prints each item immediately!
-    putStrLn outcome
 
 
