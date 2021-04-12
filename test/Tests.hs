@@ -43,11 +43,7 @@ test Empty     = emptyTest
 test Exception = exceptionTest
 
 -- | run all tests.
--- NOTE: if you want to run just non-Normal tests, comment out current 
--- statements within the `do` block and put this code instead:
--- mapM_(\x -> if x /= Normal then test x else putStrLn $ show x) [Normal ..]
+-- to skip `Normal` test, replace `[Normal ..]` with `[Empty ..]` in below code.
 run :: IO ()
-run = do
-  let allTests = map (\x -> test x) [Normal ..]
-  mapM_(\x -> x) allTests
+run = mapM_(\x -> test x) [Normal ..]
 

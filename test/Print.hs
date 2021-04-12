@@ -10,18 +10,12 @@ import Common (showE)
 
 -- | `Test` instance caption.
 caption :: Test -> String
-caption test | Empty <- test  = start ++ rest eMiddle
-             | otherwise      = start ++ rest middle
-             where start :: String
-                   start = show test
-                   rest :: String -> String
-                   rest str = " RESULTS -- Test case" ++ str ++ end
-                   eMiddle :: String
-                   eMiddle = ": [(a, b, k)]"
-                   middle :: String
-                   middle = " # : (a, b, k)"
-                   end :: String
-                   end = " | actual | expected | PASS/FAIL"
+caption test = show test ++ " RESULTS -- Test case" ++ middle ++ end
+    where middle :: String
+          middle | Empty <- test = ": [(a, b, k)]"
+                 | otherwise     = " # : (a, b, k)"
+          end :: String
+          end = " | actual | expected | PASS/FAIL"
 
 -- | `Test` instance header.
 header :: Test -> String
