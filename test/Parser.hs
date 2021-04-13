@@ -32,10 +32,10 @@ anExpected line = do
             | xs `hasNWords` 1 = Just $ oneSpaced xs
             | otherwise        = Nothing
 
--- | parse line & return primacity count test case as a comma-delimited string.
+-- | return primacity count test case as a bracketed, comma-delimited string.
 -- line pattern: `x y z` where `x`, `y`, `z` are +ve integers with any number of 
 -- digits. example: "1673990 4964281 4". we want to extract this pattern as 
--- "x,y,z".  NOTE: `x y z` means integers in [`x`..`y`] with primacity `z`.
+-- "(x,y,z)".  NOTE: `x y z` means integers in [`x`..`y`] with primacity `z`.
 testCase :: String -> Maybe String
 testCase line
           | valid     = Just $ format
@@ -43,7 +43,8 @@ testCase line
   where valid :: Bool
         valid = line `hasNWords` 3  -- example pattern: "156 287 6"
         format :: String
-        format = replace ' ' "," . oneSpaced $ line
+        format = let line' = oneSpaced line
+                 in "(" ++ replace ' ' "," line'  ++ ")"
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
@@ -62,25 +63,27 @@ parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
         nonempty = filter (/="")
 
 -- | expected primacity counts.
+-- see /u/ hammar @ https://tinyurl.com/k4fkyykk for IO-Maybe mix using <$>.
 expected :: IO [Expected]
-expected = do
-  contents <- readFile primacityCountsFile
-  let pLines = parse contents anExpected
-  return $ map (\x ->
-    case readMaybe x :: Maybe K of
-         Just y  -> Right y
-         Nothing -> error' $ PCError x
-    ) pLines
+expected = f <$> readFile primacityCountsFile
+  where f :: String -> [Expected]
+        f contents = let pLines = parse contents anExpected
+          in map (\x ->
+          case readMaybe x :: Maybe K of
+               Just y  -> Right y
+               Nothing -> error' $ PCError x
+          ) pLines
 
 -- | primacity count test cases, each of type `TestCase`.
+-- see /u/ hammar @ https://tinyurl.com/k4fkyykk for IO-Maybe mix using <$>.
 testCases :: IO [TestCase]
-testCases = do
-  contents <- readFile testCasesFile
-  let pLines = parse contents testCase
-  return $ map (\x ->
-    case readMaybe $ "(" ++ x ++ ")" :: Maybe TestCase of
-         Just y  -> y
-         Nothing -> error' $ TCError x
-    ) pLines
+testCases = f <$> readFile testCasesFile
+  where f :: String -> [TestCase]
+        f contents = let pLines = parse contents testCase
+          in map (\x ->
+          case readMaybe x :: Maybe TestCase of
+               Just y  -> y
+               Nothing -> error' $ TCError x
+          ) pLines
 
 
