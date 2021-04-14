@@ -43,7 +43,6 @@ test Empty     = emptyTest
 test Exception = exceptionTest
 
 -- | run all tests.
--- to skip `Normal` test, replace `[Normal ..]` with `[Empty ..]` in below code.
 run :: IO ()
 run = mapM_(\x -> test x) [toEnum 0 :: Test ..]
 
