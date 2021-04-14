@@ -28,18 +28,16 @@ anExpected line = do
               _ <- find (==char) str
               return $ dropWhile (/=char) str
         pcount :: String -> Maybe String
-        pcount xs
-            | xs `hasNWords` 1 = Just $ oneSpaced xs
-            | otherwise        = Nothing
+        pcount xs | xs `hasNWords` 1 = Just $ oneSpaced xs
+                  | otherwise        = Nothing
 
 -- | parse line & return the primacity count test case "x y z" as "(x,y,z)".
 -- line pattern: `x y z` where `x`, `y`, `z` are +ve integers with any number of 
 -- digits. example: "1673990 4964281 4". we want to extract this pattern as 
 -- "(x,y,z)".  NOTE: `x y z` means integers in [`x`..`y`] with primacity `z`.
 testCase :: String -> Maybe String
-testCase line
-          | valid     = Just $ format
-          | otherwise = Nothing
+testCase line | valid     = Just $ format
+              | otherwise = Nothing
   where valid :: Bool
         valid = line `hasNWords` 3  -- example pattern: "156 287 6"
         format :: String
