@@ -5,7 +5,7 @@
 module Parser (testCases, expected) where
 
 import Text.Read (readMaybe)
-import Data.List (stripPrefix, find)
+import Data.List (isPrefixOf, stripPrefix, isInfixOf, find)
 
 import Types (TestCase, Expected)
 import FileParseErrors
@@ -32,7 +32,7 @@ anExpected line = do
             | xs `hasNWords` 1 = Just $ oneSpaced xs
             | otherwise        = Nothing
 
--- | return primacity count test case as a bracketed, comma-delimited string.
+-- | parse line & return the primacity count test case "x y z" as "(x,y,z)".
 -- line pattern: `x y z` where `x`, `y`, `z` are +ve integers with any number of 
 -- digits. example: "1673990 4964281 4". we want to extract this pattern as 
 -- "(x,y,z)".  NOTE: `x y z` means integers in [`x`..`y`] with primacity `z`.
@@ -43,20 +43,24 @@ testCase line
   where valid :: Bool
         valid = line `hasNWords` 3  -- example pattern: "156 287 6"
         format :: String
-        format = let line' = oneSpaced line
-                 in "(" ++ replace ' ' "," line'  ++ ")"
+        format = let line'           = oneSpaced line
+                     commaDelimited  = replace ' ' "," line'
+                 in "(" ++ commaDelimited ++ ")"
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
-parseLine _ []          = []   -- ignore blank
-parseLine _ ('-':'-':_) = []   -- ignore comment
-parseLine f line = case (f line) of
-                        Just x  -> x
-                        Nothing -> error' $ LineFormatError line
+parseLine f line | line == []             = []   -- ignore blank
+                 | "--" `isPrefixOf` line = []   -- ignore comment
+                 | "--" `isInfixOf` line  = parseLine' $ takeWhile (/= '-') line
+                 | otherwise              = parseLine' line
+  where parseLine' :: String -> String
+        parseLine' line' = case (f line') of
+                                Just x  -> x
+                                Nothing -> error' $ LineFormatError line
 
 -- | parse contents, parsing each line using a supplied parsing function.
 parse :: String -> (String -> Maybe String) -> [String]
-parse contents f = nonempty . map (\line -> parseLine f line) $ allLines
+parse contents f = nonempty . map (\line -> parseLine f . oneSpaced $ line) $ allLines
   where allLines :: [String]
         allLines = lines contents
         nonempty :: [String]-> [String]
