@@ -25,7 +25,7 @@ header test = concat [seperator, "\n", caption test, "\n", seperator]
         maxSize :: Int
         maxSize = last . sort $ captionSizes
         captionSizes :: [Int]
-        captionSizes = map (\x -> length . caption $ x) [Normal ..]
+        captionSizes = map (\x -> length . caption $ x) [toEnum 0 :: Test ..]
 
 -- | prints a test case result.
 printResult :: [String] -> Bool -> IO ()
