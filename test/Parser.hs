@@ -5,7 +5,7 @@
 module Parser (testCases, expected) where
 
 import Text.Read (readMaybe)
-import Data.List (isPrefixOf, stripPrefix, isInfixOf, find)
+import Data.List (stripPrefix, isInfixOf, find)
 
 import Types (TestCase, Expected)
 import FileParseErrors
@@ -47,8 +47,8 @@ testCase line | valid     = Just $ format
 
 -- | parse a line of text.
 parseLine :: (String -> Maybe String) -> String -> String
-parseLine f line | line == []             = []   -- ignore blank
-                 | "--" `isPrefixOf` line = []   -- ignore comment
+parseLine f line | [] <- line             = []   -- ignore blank
+                 | ('-':'-':_) <- line    = []   -- ignore comment
                  | "--" `isInfixOf` line  = parseLine' $ takeWhile (/= '-') line
                  | otherwise              = parseLine' line
   where parseLine' :: String -> String

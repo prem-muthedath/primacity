@@ -14,19 +14,17 @@ import Print (printResults)
 -- | run primacity count test for inputs that generate exception.
 -- this test checks error handling.
 exceptionTest :: IO ()
-exceptionTest = do
-  let xs :: [TestCase] = exceptionTestCases
-      zs :: [Expected] = exceptionExpected
-      ys :: [Actual]   = primacityCounts xs
-  printResults Exception xs ys zs
+exceptionTest = let xs :: [TestCase] = exceptionTestCases
+                    zs :: [Expected] = exceptionExpected
+                    ys :: [Actual]   = primacityCounts xs
+                in printResults Exception xs ys zs
 
 -- | run primacity count test for empty input.
 emptyTest :: IO ()
-emptyTest = do
-  let xs :: [TestCase] = []
-      zs :: [Expected] = []
-      ys :: [Actual]   = primacityCounts xs
-  printResults Empty xs ys zs
+emptyTest = let xs :: [TestCase] = []
+                zs :: [Expected] = []
+                ys :: [Actual]   = primacityCounts xs
+            in printResults Empty xs ys zs
 
 -- | run primacity count test for "normal" (i.e., good) inputs.
 normalTest :: IO ()

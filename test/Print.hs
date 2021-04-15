@@ -47,10 +47,10 @@ printResults test xs ys zs = do
             printResult ps status
         printNonEmpty :: IO ()
         printNonEmpty = mapM_(\(n, x, y, z) ->
-            do let ps     = [show x, showE y, showE z]
-                   status = (y == z)
-               putStr $ "Test case #" ++  show n ++ ": "
-               printResult ps status) results
+              let ps     = [show x, showE y, showE z]
+                  status = (y == z)
+              in do putStr $ "Test case #" ++  show n ++ ": "
+                    printResult ps status) results
         results :: [(TestCaseNo, TestCase, Actual, Expected)]
         results = zipWith4 (\n x y z -> (n, x, y, z)) [1..] xs ys zs
 
