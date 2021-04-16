@@ -16,8 +16,8 @@ EXECUTION STEPS (interactive mode):
   1. the program first prompts the user for "number of questions", which we call 
      as `n`.  `n` can be any positive integer (i.e., 1, 2, 3, etc.).
   2. the program then prompts the user `n` times for values of A, B, K.
-  3. after each A-B-K input, the program spits out the number of items in [A, B] 
-     with primacity K.
+  3. after each A-B-K input, the program spits out the number of integers in [A, 
+     B] with primacity K.
 
 HOW TO RUN THE PROGRAM AND TESTS:
   1. `cd` to `primacity` -- the top directory containing this `README` file.

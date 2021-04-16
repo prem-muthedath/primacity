@@ -18,7 +18,7 @@
 --    1. the program first prompts user for "number of questions", which we call 
 --       as `n`.  `n` can be any positive integer (i.e., 1, 2, 3, etc.).
 --    2. the program then prompts user `n` times for values of A, B, K.
---    3. after each A-B-K input, the program spits out the number of items in 
+--    3. after each A-B-K input, the program spits out the number of integers in 
 --       [A, B] with primacity K.
 --
 --  CHANGES (by Prem Muthedath):
