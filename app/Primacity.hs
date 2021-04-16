@@ -8,8 +8,9 @@
 -- details, see ~/software-development/notes/facebook-hackathon-2015.pages
 
 -- basically, given 3 positive integers -- A, B, K -- output number of items in 
--- [A, B] with primacity K.  For example, if A=5, B=15, K=2, the program will 
--- output 5 -- i.e., 5 numbers in [5, 15] have primacity 2.
+-- [A, B] with primacity K, where primacity of an integer is the number of 
+-- distinct primes (>1) that divide it. For example, if A=5, B=15, K=2, the 
+-- program will output 5 -- i.e., 5 numbers in [5, 15] have primacity 2.
 --
 --  NOTE: we must always have 2 <= A <= B, K >= 1.
 --
@@ -86,7 +87,7 @@ isPrime :: Int -> Bool
 isPrime n = isPrime_ n primes
   -- prem: + type-signature, [] pattern match
   where isPrime_ :: Int -> [Int] -> Bool
-        isPrime_ m [] = isPrime_ m primes
+        isPrime_ m [] = isPrime_ m primes     -- this case should never happen.
         isPrime_ m (p:ps)
             | p * p > m      = True
             | m `mod` p == 0 = False
@@ -103,7 +104,7 @@ primeFactors :: Int -> [Int]
 primeFactors n = factors n primes
   -- prem: + type-signature, [] pattern match
   where factors :: Int -> [Int] -> [Int]
-        factors m [] = factors m primes
+        factors m [] = factors m primes       -- this case should never happen.
         factors m (x:xs)
             | x * x > m      = [m]
             | m `mod` x == 0 = x : factors (m `div` x) (x:xs)
