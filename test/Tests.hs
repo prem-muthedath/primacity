@@ -42,5 +42,5 @@ test Exception = exceptionTest
 
 -- | run all tests.
 run :: IO ()
-run = mapM_(\x -> test x) [toEnum 0 :: Test ..]
+run = mapM_(\x -> test x) tests
 

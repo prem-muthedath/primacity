@@ -21,4 +21,8 @@ instance Show Test where
   show Empty      = "PRIMACITY COUNT EMPTY TEST"
   show Exception  = "PRIMACITY COUNT EXCEPTION TEST"
 
+-- | list of all `Test` instances.
+tests :: [Test]
+tests = [toEnum 0 :: Test ..]
+
 
