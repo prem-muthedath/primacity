@@ -7,10 +7,10 @@
 -- this code solves (fast) the primacity problem in facebook hackathon 2015. for 
 -- details, see ~/software-development/notes/facebook-hackathon-2015.pages
 
--- basically, given 3 positive integers -- A, B, K -- output number of items in 
--- [A, B] with primacity K, where primacity of an integer is the number of 
+-- basically, given 3 positive integers -- A, B, K -- output number of integers
+-- in [A, B] with primacity K, where primacity of an integer is the number of 
 -- distinct primes (>1) that divide it. For example, if A=5, B=15, K=2, the 
--- program will output 5 -- i.e., 5 numbers in [5, 15] have primacity 2.
+-- program will output 5 -- i.e., 5 integers in [5, 15] have primacity 2.
 --
 --  NOTE: we must always have 2 <= A <= B, K >= 1.
 --
